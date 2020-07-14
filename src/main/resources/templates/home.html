@@ -3,8 +3,73 @@
 <head>
     <meta charset="UTF-8">
     <title>Cuisine Online</title>
+    <link rel="stylesheet" href="/css/reset-css.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
 </head>
 <body>
-<h1>Work in progress...</h1>
+<header>
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <a class="navbar-brand text-white h4" href="/home">Cuisine</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#userNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="userNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item active">
+                    <a class="nav-link h5" href="/recipes">All Recipes</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link h5" href="/users">All Users</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link h5" href="/appliances">All Appliances</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link h5" href="/recipes-add">Add Recipe</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link h5" href="/appliances-add">Add Appliance</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link h5" href="/profile">Profile</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link h5" href="/logout">Logout</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</header>
+<main>
+    <div class="content-main">
+        <div class="text-center mb-3">
+            <span class="text-white mt-2 h4">Welcome, George! Here are some of our recipes...</span>
+        </div>
+        <hr class="my-3"/>
+        <div class="row mb-4 d-flex justify-content-around">
+            <div class="col-md-3 d-flex flex-column text-center mb-3">
+                <img src="img/pizza.jpg" class="img-thumb" width="350" height="350"/>
+                <h5 class="text-white text-center">Pizza</h5>
+            </div>
+            <div class="col-md-3 d-flex flex-column text-center mb-3">
+                <img src="img/spaghetti.jpg" class="img-thumb" width="350" height="350"/>
+                <h5 class="text-white text-center">Pasta</h5>
+            </div>
+            <div class="col-md-3 d-flex flex-column text-center mb-3">
+                <img src="img/salad.jpg" class="img-thumb" width="350" height="350"/>
+                <h5 class="text-white text-center">Salad</h5>
+            </div>
+        </div>
+    </div>
+</main>
+<footer class="footer py-2">
+    <div class="container-fluid text-center">
+        <div class="footer-background h7 text-white">
+            &#169; CopyRight Cuisine Online. All rights reserved.
+        </div>
+    </div>
+</footer>
 </body>
 </html>
