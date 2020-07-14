@@ -8,11 +8,11 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Ingredient extends BaseEntity {
+public class Video extends BaseEntity {
 
-    private String name;
+    private String title;
 
-    private String quantity;
+    private String url;
 
-    private String unit;
+    private Profile uploader;
 }

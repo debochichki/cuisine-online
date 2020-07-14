@@ -18,22 +18,22 @@
         <div class="collapse navbar-collapse" id="userNav">
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item active">
-                    <a class="nav-link h5" href="/home">Home</a>
+                    <a class="nav-link h5" href="/recipes">All Recipes</a>
                 </li>
                 <li class="nav-item active">
-                    <a class="nav-link h5" href="/salads">Salads</a>
+                    <a class="nav-link h5" href="/users">All Users</a>
                 </li>
                 <li class="nav-item active">
-                    <a class="nav-link  h5" href="/soups">Soups</a>
+                    <a class="nav-link h5" href="/appliances">All Appliances</a>
                 </li>
                 <li class="nav-item active">
-                    <a class="nav-link h5" href="/dishes">Main dishes</a>
+                    <a class="nav-link h5" href="/recipes-add">Add Recipe</a>
                 </li>
                 <li class="nav-item active">
-                    <a class="nav-link h5" href="/desserts">Desserts</a>
+                    <a class="nav-link h5" href="/appliances-add">Add Appliance</a>
                 </li>
                 <li class="nav-item active">
-                    <a class="nav-link h5" href="/drinks">Drinks</a>
+                    <a class="nav-link h5" href="/profile">Profile</a>
                 </li>
                 <li class="nav-item active">
                     <a class="nav-link h5" href="/logout">Logout</a>
@@ -44,12 +44,11 @@
 </header>
 <main>
     <div class="container content-main">
-        <span class="text-white h1">All Recipes</span>
+        <span class="text-white h1">All Videos</span>
         <hr class="hr-3"/>
-        <table class="table bg-blur">
+        <table class="table table-hover bg-blur">
             <thead>
             <tr>
-                <th scope="col"><label class="text-white h4">Type</label></th>
                 <th scope="col"><label class="text-white h4">Title</label></th>
                 <th scope="col"><label class="text-white h4">Uploader</label></th>
                 <th scope="col"></th>
@@ -59,8 +58,7 @@
             </thead>
             <tbody>
             <tr>
-                <td><img src="/icon/main_dish_icon.png" alt="Type-salad img" width="50" height="50"/></td>
-                <td class="text-white h5">Pylneni Chushki</td>
+                <td class="text-white h5">Pylneni Chushki video lesson</td>
                 <td class="text-white h5">Manchev</td>
                 <td>
                     <form action="/recipes/delete/{id}" method="post">
@@ -79,8 +77,7 @@
                 </td>
             </tr>
             <tr>
-                <td><img src="/icon/soup_icon.png" alt="Type-salad icon" width="50" height="50"/></td>
-                <td class="text-white h5">Shkembe chorba</td>
+                <td class="text-white h5">Shkembe chorba video lesson</td>
                 <td class="text-white h5">Ivan</td>
                 <td>
                     <form action="/recipes/delete/{id}" method="post">
@@ -99,8 +96,7 @@
                 </td>
             </tr>
             <tr>
-                <td><img src="/icon/soup_icon.png" alt="Type-salad img" width="50" height="50"/></td>
-                <td class="text-white h5">Tarator</td>
+                <td class="text-white h5">Tarator video lesson</td>
                 <td class="text-white h5">SHishkov</td>
                 <td>
                     <form action="/recipes/delete/{id}" method="post">
@@ -119,8 +115,7 @@
                 </td>
             </tr>
             <tr>
-                <td><img src="/icon/dessert_icon.png" alt="Type-salad img" width="50" height="50"/></td>
-                <td class="text-white h5">Krem Karamel</td>
+                <td class="text-white h5">Krem Karamel video lesson</td>
                 <td class="text-white h5">Angelov</td>
                 <td>
                     <form action="/recipes/delete/{id}" method="post">
@@ -139,8 +134,7 @@
                 </td>
             </tr>
             <tr>
-                <td><img src="/icon/salad_icon.png" alt="Type-salad img" width="50" height="50"/></td>
-                <td class="text-white h5">Shopska Salatka</td>
+                <td class="text-white h5">Shopska Salatka video lesson</td>
                 <td class="text-white h5">Shopite</td>
                 <td>
                     <form action="/recipes/delete/{id}" method="post">
@@ -159,8 +153,7 @@
                 </td>
             </tr>
             <tr>
-                <td><img src="/icon/drink_icon.png" alt="Type-salad img" width="50" height="50"/></td>
-                <td class="text-white h5">Mohitto</td>
+                <td class="text-white h5">Mohitto video lesson</td>
                 <td class="text-white h5">Bohema</td>
                 <td>
                     <form action="/recipes/delete/{id}" method="post">

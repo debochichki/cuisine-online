@@ -1,5 +1,6 @@
 package com.softuni.cuisineonline.data.models;
 
+import com.softuni.cuisineonline.data.models.base.BaseEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -9,7 +10,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Recipe {
+public class Recipe extends BaseEntity {
 
     public enum Type {
         SALAD, SOUP, MAIN_DISH, DESSERT, DRINK,

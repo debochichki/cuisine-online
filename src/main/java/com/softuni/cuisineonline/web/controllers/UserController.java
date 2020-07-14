@@ -8,6 +8,11 @@ public class UserController {
 
     @GetMapping("/profile")
     public String getProfile() {
-        return "profile.html";
+        return "user/profile.html";
+    }
+
+    @GetMapping("/users")
+    public String getAllUsers() {
+        return "user/all-users.html";
     }
 }

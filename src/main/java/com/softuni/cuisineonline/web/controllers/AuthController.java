@@ -8,12 +8,12 @@ public class AuthController {
 
     @GetMapping("/login")
     public String getLoginForm() {
-        return "login.html";
+        return "auth/login.html";
     }
 
     @GetMapping("/register")
     public String getRegisterForm() {
-        return "register.html";
+        return "auth/register.html";
     }
 
 }
