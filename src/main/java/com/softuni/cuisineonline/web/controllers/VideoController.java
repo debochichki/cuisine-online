@@ -12,4 +12,24 @@ public class VideoController {
     public String getAllVideos() {
         return "video/all-videos.html";
     }
+
+    @GetMapping("/upload")
+    public String getUploadForm() {
+        return "video/upload-video";
+    }
+
+    @GetMapping("/view")
+    public String getVideoView() {
+        return "video/view-video";
+    }
+
+    @GetMapping("/edit")
+    public String getEditForm() {
+        return "video/edit-video";
+    }
+
+    @GetMapping("/delete")
+    public String getDeleteForm() {
+        return "video/delete-video";
+    }
 }
