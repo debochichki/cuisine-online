@@ -5,12 +5,25 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
-public class Appliance extends BaseEntity {
+@Entity
+@Table(name = "appliances")
+public class Appliance extends BaseEntity implements Serializable {
 
+    private static final long serialVersionUID = 1000L;
+
+    @Column(nullable = false, unique = true)
     private String name;
 
+    @Transient
     private Image image;
+
+    @ManyToMany(mappedBy = "appliances")
+    private List<Recipe> recipes;
 }
