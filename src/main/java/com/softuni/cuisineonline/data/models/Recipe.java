@@ -25,7 +25,8 @@ public class Recipe extends BaseEntity implements Serializable {
     @Column(nullable = false, unique = true)
     private String title;
 
-    @Transient
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "fk_image", referencedColumnName = "id", nullable = false)
     private Image image;
 
     @Enumerated(EnumType.STRING)

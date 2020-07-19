@@ -21,7 +21,8 @@ public class Appliance extends BaseEntity implements Serializable {
     @Column(nullable = false, unique = true)
     private String name;
 
-    @Transient
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "fk_image", referencedColumnName = "id", nullable = false)
     private Image image;
 
     @ManyToMany(mappedBy = "appliances")
