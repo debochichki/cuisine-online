@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Cuisine Online</title>
@@ -44,15 +45,15 @@
 </header>
 <main>
     <div class="content-main">
-        <h1 class="text-center text-white">Some recipe title</h1>
+        <h1 class="text-center text-white" th:text="${video.title}"></h1>
         <hr class="hr-3"/>
         <div class="text-center mt-5">
             <iframe class="img-thumb" width="700" height="395"
-                    src="https://www.youtube.com/embed/pZOa8P_rXT8"
+                    th:src="@{https://www.youtube.com/embed/{url}(url=${video.url})}"
                     frameborder="1" alt="no video attached" allowfullscreen="0"></iframe>
         </div>
         <div class="label mt-4">
-            <h4 class="text-white text-center mb-3">Uploader: Gogo</h4>
+            <h4 class="text-white text-center mb-3" th:text="'Uploader: ' + ${video.uploaderUsername}"></h4>
         </div>
     </div>
 </main>

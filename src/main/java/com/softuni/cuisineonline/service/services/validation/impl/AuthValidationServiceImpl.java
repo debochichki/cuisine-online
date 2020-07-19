@@ -2,7 +2,7 @@ package com.softuni.cuisineonline.service.services.validation.impl;
 
 import com.softuni.cuisineonline.data.repositories.UserRepository;
 import com.softuni.cuisineonline.errors.ValidationException;
-import com.softuni.cuisineonline.service.models.UserRegisterServiceModel;
+import com.softuni.cuisineonline.service.models.auth.UserRegisterServiceModel;
 import com.softuni.cuisineonline.service.services.util.EncodingService;
 import com.softuni.cuisineonline.service.services.validation.AuthValidationService;
 import org.springframework.stereotype.Service;
@@ -15,7 +15,7 @@ import java.util.regex.Pattern;
 @Service
 public class AuthValidationServiceImpl implements AuthValidationService {
 
-    public static final Pattern VALID_EMAIL_ADDRESS_REGEX =
+    private static final Pattern VALID_EMAIL_ADDRESS_REGEX =
             Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
 
     private final UserRepository userRepository;

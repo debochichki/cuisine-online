@@ -1,7 +1,7 @@
 package com.softuni.cuisineonline.service.services.domain;
 
-import com.softuni.cuisineonline.service.models.UserLoginServiceModel;
-import com.softuni.cuisineonline.service.models.UserRegisterServiceModel;
+import com.softuni.cuisineonline.service.models.auth.UserLoginServiceModel;
+import com.softuni.cuisineonline.service.models.auth.UserRegisterServiceModel;
 
 public interface AuthService {
 

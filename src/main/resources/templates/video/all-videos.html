@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Cuisine Online</title>
@@ -57,120 +58,21 @@
             </tr>
             </thead>
             <tbody>
-            <tr>
-                <td class="text-white h5">Pylneni Chushki video lesson</td>
-                <td class="text-white h5">Manchev</td>
-                <td>
-                    <form action="/recipes/delete/{id}" method="post">
-                        <button class="btn btn-danger">Delete</button>
-                    </form>
-                </td>
-                <td>
-                    <form action="/recipes/edit/{id}" method="post">
-                        <button class="btn btn-warning">Edit</button>
-                    </form>
-                </td>
-                <td>
-                    <form action="/recipes/view/{id}" method="post">
-                        <button class="btn btn-success">View</button>
-                    </form>
-                </td>
-            </tr>
-            <tr>
-                <td class="text-white h5">Shkembe chorba video lesson</td>
-                <td class="text-white h5">Ivan</td>
-                <td>
-                    <form action="/recipes/delete/{id}" method="post">
-                        <button class="btn btn-danger">Delete</button>
-                    </form>
-                </td>
-                <td>
-                    <form action="/recipes/edit/{id}" method="post">
-                        <button class="btn btn-warning">Edit</button>
-                    </form>
-                </td>
-                <td>
-                    <form action="/recipes/view/{id}" method="post">
-                        <button class="btn btn-success">View</button>
-                    </form>
-                </td>
-            </tr>
-            <tr>
-                <td class="text-white h5">Tarator video lesson</td>
-                <td class="text-white h5">SHishkov</td>
-                <td>
-                    <form action="/recipes/delete/{id}" method="post">
-                        <button class="btn btn-danger">Delete</button>
-                    </form>
-                </td>
-                <td>
-                    <form action="/recipes/edit/{id}" method="post">
-                        <button class="btn btn-warning">Edit</button>
-                    </form>
-                </td>
-                <td>
-                    <form action="/recipes/view/{id}" method="post">
-                        <button class="btn btn-success">View</button>
-                    </form>
-                </td>
-            </tr>
-            <tr>
-                <td class="text-white h5">Krem Karamel video lesson</td>
-                <td class="text-white h5">Angelov</td>
-                <td>
-                    <form action="/recipes/delete/{id}" method="post">
-                        <button class="btn btn-danger">Delete</button>
-                    </form>
-                </td>
-                <td>
-                    <form action="/recipes/edit/{id}" method="post">
-                        <button class="btn btn-warning">Edit</button>
-                    </form>
-                </td>
-                <td>
-                    <form action="/recipes/view/{id}" method="post">
-                        <button class="btn btn-success">View</button>
-                    </form>
-                </td>
-            </tr>
-            <tr>
-                <td class="text-white h5">Shopska Salatka video lesson</td>
-                <td class="text-white h5">Shopite</td>
-                <td>
-                    <form action="/recipes/delete/{id}" method="post">
-                        <button class="btn btn-danger">Delete</button>
-                    </form>
-                </td>
-                <td>
-                    <form action="/recipes/edit/{id}" method="post">
-                        <button class="btn btn-warning">Edit</button>
-                    </form>
-                </td>
-                <td>
-                    <form action="/recipes/view/{id}" method="post">
-                        <button class="btn btn-success">View</button>
-                    </form>
-                </td>
-            </tr>
-            <tr>
-                <td class="text-white h5">Mohitto video lesson</td>
-                <td class="text-white h5">Bohema</td>
-                <td>
-                    <form action="/recipes/delete/{id}" method="post">
-                        <button class="btn btn-danger">Delete</button>
-                    </form>
-                </td>
-                <td>
-                    <form action="/recipes/edit/{id}" method="post">
-                        <button class="btn btn-warning">Edit</button>
-                    </form>
-                </td>
-                <td>
-                    <form action="/recipes/view/{id}" method="post">
-                        <button class="btn btn-success">View</button>
-                    </form>
-                </td>
-            </tr>
+            <th:block th:each="video : ${videos}">
+                <tr>
+                    <td class="text-white h5" th:text="${video.title}"></td>
+                    <td class="text-white h5" th:text="${video.uploaderUsername}"></td>
+                    <td>
+                        <a th:href="@{'/videos/delete/' + ${video.id}}" class="btn btn-danger">Delete</a>
+                    </td>
+                    <td>
+                        <a th:href="@{'/videos/edit/' + ${video.id}}" class="btn btn-warning">Edit</a>
+                    </td>
+                    <td>
+                        <a th:href="@{'/videos/view/' + ${video.id}}" class="btn btn-success">View</a>
+                    </td>
+                </tr>
+            </th:block>
             </tbody>
         </table>
     </div>

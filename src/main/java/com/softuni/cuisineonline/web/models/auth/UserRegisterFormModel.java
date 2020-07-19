@@ -1,4 +1,4 @@
-package com.softuni.cuisineonline.service.models;
+package com.softuni.cuisineonline.web.models.auth;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class UserRegisterServiceModel {
+public class UserRegisterFormModel {
 
     private String username;
 

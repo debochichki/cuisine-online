@@ -1,11 +1,11 @@
 package com.softuni.cuisineonline.web.controllers;
 
-import com.softuni.cuisineonline.service.models.UserLoginServiceModel;
-import com.softuni.cuisineonline.service.models.UserRegisterServiceModel;
+import com.softuni.cuisineonline.service.models.auth.UserLoginServiceModel;
+import com.softuni.cuisineonline.service.models.auth.UserRegisterServiceModel;
 import com.softuni.cuisineonline.service.services.domain.AuthService;
 import com.softuni.cuisineonline.service.services.util.MappingService;
-import com.softuni.cuisineonline.web.models.UserLoginFormModel;
-import com.softuni.cuisineonline.web.models.UserRegisterFormModel;
+import com.softuni.cuisineonline.web.models.auth.UserLoginFormModel;
+import com.softuni.cuisineonline.web.models.auth.UserRegisterFormModel;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -35,18 +35,18 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public String login(@ModelAttribute UserLoginFormModel userLoginModel, HttpSession session) {
+    public String login(@ModelAttribute UserLoginFormModel loginModel, HttpSession session) {
         UserLoginServiceModel serviceModel =
-                mappingService.map(userLoginModel, UserLoginServiceModel.class);
+                mappingService.map(loginModel, UserLoginServiceModel.class);
         String userUsername = authService.login(serviceModel);
         session.setAttribute("username", userUsername);
         return "redirect:/home";
     }
 
     @PostMapping("/register")
-    public String register(@ModelAttribute UserRegisterFormModel userRegisterModel) {
+    public String register(@ModelAttribute UserRegisterFormModel registerModel) {
         UserRegisterServiceModel serviceModel =
-                mappingService.map(userRegisterModel, UserRegisterServiceModel.class);
+                mappingService.map(registerModel, UserRegisterServiceModel.class);
         authService.register(serviceModel);
         return "redirect:/login";
     }
