@@ -1,4 +1,4 @@
-package com.softuni.cuisineonline.web.controllers;
+package com.softuni.cuisineonline.web.view.controllers;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

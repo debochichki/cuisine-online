@@ -1,11 +1,11 @@
-package com.softuni.cuisineonline.web.controllers;
+package com.softuni.cuisineonline.web.view.controllers;
 
 import com.softuni.cuisineonline.service.models.auth.UserLoginServiceModel;
 import com.softuni.cuisineonline.service.models.auth.UserRegisterServiceModel;
 import com.softuni.cuisineonline.service.services.domain.AuthService;
 import com.softuni.cuisineonline.service.services.util.MappingService;
-import com.softuni.cuisineonline.web.models.auth.UserLoginFormModel;
-import com.softuni.cuisineonline.web.models.auth.UserRegisterFormModel;
+import com.softuni.cuisineonline.web.view.models.auth.UserLoginFormModel;
+import com.softuni.cuisineonline.web.view.models.auth.UserRegisterFormModel;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;

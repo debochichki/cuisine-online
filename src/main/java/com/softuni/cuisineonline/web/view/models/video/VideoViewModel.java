@@ -1,4 +1,4 @@
-package com.softuni.cuisineonline.web.models.video;
+package com.softuni.cuisineonline.web.view.models.video;
 
 
 import lombok.Getter;

@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Map;
 
 import static com.cloudinary.Cloudinary.emptyMap;
 
@@ -25,14 +26,29 @@ public class CloudinaryServiceImpl implements CloudinaryService {
     public Image uploadImage(final MultipartFile multipartFile) {
         String url = null;
         File file = null;
+        String publicId = null;
         try {
             file = File.createTempFile("temp-file", multipartFile.getOriginalFilename());
             multipartFile.transferTo(file);
-            url = cloudinary.uploader().upload(file, emptyMap()).get("url").toString();
+            final Map cloudinaryParams = cloudinary.uploader().upload(file, emptyMap());
+            url = cloudinaryParams.get("url").toString();
+            publicId = cloudinaryParams.get("public_id").toString();
         } catch (IOException e) {
             throw new ServerException("Problem while uploading image. Please try again.", e);
         }
 
-        return new Image(url);
+        Image image = new Image();
+        image.setPublicId(publicId);
+        image.setUrl(url);
+        return image;
+    }
+
+    @Override
+    public void deleteImage(final String publicId) {
+        try {
+            cloudinary.uploader().destroy(publicId, emptyMap());
+        } catch (IOException e) {
+            throw new ServerException("Problem while deleting image.", e);
+        }
     }
 }

@@ -1,7 +1,6 @@
 package com.softuni.cuisineonline.data.models;
 
 import com.softuni.cuisineonline.data.models.base.BaseEntity;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,12 +13,14 @@ import java.io.Serializable;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 @Entity
 @Table(name = "images")
 public class Image extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 1000L;
+
+    @Column(nullable = false)
+    private String publicId;
 
     @Column(nullable = false)
     private String url;

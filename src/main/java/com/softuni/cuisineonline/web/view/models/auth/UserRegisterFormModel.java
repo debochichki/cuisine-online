@@ -1,4 +1,4 @@
-package com.softuni.cuisineonline.web.models.auth;
+package com.softuni.cuisineonline.web.view.models.auth;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

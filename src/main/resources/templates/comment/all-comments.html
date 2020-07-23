@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
+>
 <head>
     <meta charset="UTF-8">
     <title>Cuisine Online</title>
@@ -44,20 +44,42 @@
     </nav>
 </header>
 <main>
-    <div class="content-main">
-        <span class="text-white h1">Appliances</span>
+    <div class="container content-main">
+        <h1 class="text-center text-white">Feedback</h1>
         <hr class="hr-3"/>
-        <div class="row mb-4 d-flex justify-content-around">
-            <th:block th:each="appliance : ${appliances}">
-                <div class="col-md-3 d-flex flex-column text-center mb-3">
-                    <img th:src="${appliance.imageUrl}" class="img-thumb" width="350" height="350"/>
-                    <h5 class="text-white text-center" th:text="${appliance.name}"></h5>
-                    <a class="btn btn-danger mb-2" th:href="@{'/appliances/delete/' + ${appliance.id}}">Delete</a>
-                </div>
-            </th:block>
-        </div>
+        <textarea name="comment" class="text-area-comment area-bg-blur w-75 text-white" rows="7" disabled>
+            Author: gogo / 2020-06-20 15:40
+
+            BAlkgjrbdgfoigbfgjdflg  bjodfijgiodfjbgo  ijdfoigboidfjbgdf
+            BAlkgjrbdgfoigb   bgjdflgbjodfijg  fjbgoijdfoigboidjjjjfjbgdf
+            BAlkgjrb  foigbfjbgdfjbgjdfliodfjbgoijdfoigboidfjbgdf
+            BAlkgjrbdg    bfjbgdfjbgjdflgbj     iodfjboigboidfjbgdf
+        </textarea>
+        <hr class="hr-3"/>
+        <textarea name="comment" class="text-area-comment area-bg-blur w-75 text-white" rows="7" disabled>
+            Author: pepo / 2020-07-20 18:00
+
+            BAlkgjrbdgfoigbfjbgdfjbgjdflgbjodfijgiodfjbgoijdfoigboidfjbgdf
+            BAlkgjrbdgfoigbfjbgdfjbgjdflgbjodfijgiodfjbgoijdfoigboidfjbgdf
+            BAlkgjrbdgfoigbfjbgdfjbgjdflgbjodfijgiodfjbgoijdfoigboidfjbgdf
+            BAlkgjrbdgfoigbfjbgdfjbgjdflgbjodfijgiodfjbgoijdfoigboidfjbgdf
+        </textarea>
+        <hr class="hr-3"/>
+        <form class="mx-auto" action="/comments/all" method="post">
+            <textarea name="comment" class="text-area-comment w-75" rows="7"
+                      placeholder="Enter text here..."></textarea>
+            <div class="button-holder d-flex justify-content-center">
+                <button class="btn btn-success text-white mt-3 mb-5" type="submit">Post</button>
+            </div>
+        </form>
     </div>
 </main>
-<th:block th:include="~{fragments/footer}"/>
+<footer class="footer py-2">
+    <div class="container-fluid text-center">
+        <div class="footer-background h7 text-white">
+            &#169; CopyRight Cuisine Online. All rights reserved.
+        </div>
+    </div>
+</footer>
 </body>
 </html>

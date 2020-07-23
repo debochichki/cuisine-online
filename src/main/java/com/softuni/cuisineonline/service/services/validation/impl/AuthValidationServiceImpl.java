@@ -3,14 +3,16 @@ package com.softuni.cuisineonline.service.services.validation.impl;
 import com.softuni.cuisineonline.data.repositories.UserRepository;
 import com.softuni.cuisineonline.errors.ValidationException;
 import com.softuni.cuisineonline.service.models.auth.UserRegisterServiceModel;
-import com.softuni.cuisineonline.service.services.util.EncodingService;
 import com.softuni.cuisineonline.service.services.validation.AuthValidationService;
 import org.springframework.stereotype.Service;
-import org.thymeleaf.util.StringUtils;
 
-import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static com.softuni.cuisineonline.service.services.util.Constants.USERNAME_LENGTH_LOWER_BOUND;
+import static com.softuni.cuisineonline.service.services.util.Constants.USERNAME_LENGTH_UPPER_BOUND;
+import static com.softuni.cuisineonline.service.services.util.InputUtil.areAllFilled;
+import static com.softuni.cuisineonline.service.services.util.InputUtil.isLengthInBounds;
 
 @Service
 public class AuthValidationServiceImpl implements AuthValidationService {
@@ -19,11 +21,9 @@ public class AuthValidationServiceImpl implements AuthValidationService {
             Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
 
     private final UserRepository userRepository;
-    private final EncodingService encodingService;
 
-    public AuthValidationServiceImpl(UserRepository userRepository, EncodingService encodingService) {
+    public AuthValidationServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.encodingService = encodingService;
     }
 
     @Override
@@ -35,6 +35,13 @@ public class AuthValidationServiceImpl implements AuthValidationService {
 
         if (!areAllFilled(username, password, confirmPassword, email)) {
             throw new ValidationException("Fill all obligatory fields.");
+        }
+
+        if (!isLengthInBounds(username, USERNAME_LENGTH_LOWER_BOUND, USERNAME_LENGTH_UPPER_BOUND)) {
+            throw new ValidationException(
+                    String.format("Username length needs to be between %d and %d symbols",
+                            USERNAME_LENGTH_LOWER_BOUND,
+                            USERNAME_LENGTH_UPPER_BOUND));
         }
 
         if (!arePasswordsMatching(password, confirmPassword)) {
@@ -69,9 +76,5 @@ public class AuthValidationServiceImpl implements AuthValidationService {
 
     private boolean arePasswordsMatching(String password, String confirmPassword) {
         return password.equals(confirmPassword);
-    }
-
-    private boolean areAllFilled(String... obligatoryFields) {
-        return Arrays.stream(obligatoryFields).noneMatch(StringUtils::isEmptyOrWhitespace);
     }
 }

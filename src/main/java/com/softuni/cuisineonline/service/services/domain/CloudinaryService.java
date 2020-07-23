@@ -12,4 +12,6 @@ public interface CloudinaryService {
      * @return
      */
     Image uploadImage(MultipartFile image);
+
+    void deleteImage(String imageUrl);
 }

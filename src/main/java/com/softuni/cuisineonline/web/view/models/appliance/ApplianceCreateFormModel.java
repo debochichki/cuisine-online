@@ -1,4 +1,4 @@
-package com.softuni.cuisineonline.web.models.appliance;
+package com.softuni.cuisineonline.web.view.models.appliance;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -1,13 +1,13 @@
-package com.softuni.cuisineonline.web.controllers;
+package com.softuni.cuisineonline.web.view.controllers;
 
 import com.softuni.cuisineonline.service.models.video.VideoEditServiceModel;
 import com.softuni.cuisineonline.service.models.video.VideoUploadServiceModel;
 import com.softuni.cuisineonline.service.services.domain.VideoService;
 import com.softuni.cuisineonline.service.services.util.MappingService;
-import com.softuni.cuisineonline.web.models.video.VideoDeleteFormModel;
-import com.softuni.cuisineonline.web.models.video.VideoEditFormModel;
-import com.softuni.cuisineonline.web.models.video.VideoUploadFormModel;
-import com.softuni.cuisineonline.web.models.video.VideoViewModel;
+import com.softuni.cuisineonline.web.view.models.video.VideoDeleteFormModel;
+import com.softuni.cuisineonline.web.view.models.video.VideoEditFormModel;
+import com.softuni.cuisineonline.web.view.models.video.VideoUploadFormModel;
+import com.softuni.cuisineonline.web.view.models.video.VideoViewModel;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -81,8 +81,8 @@ public class VideoController {
     }
 
     @PostMapping("/delete")
-    public String deleteVideo(@ModelAttribute VideoDeleteFormModel deleteMode) {
-        videoService.delete(deleteMode.getId());
+    public String deleteVideo(@ModelAttribute VideoDeleteFormModel deleteModel) {
+        videoService.delete(deleteModel.getId());
         return "redirect:/videos/all";
     }
 
