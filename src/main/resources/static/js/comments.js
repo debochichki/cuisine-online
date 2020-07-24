@@ -2,9 +2,7 @@ const URLS = {
     comments: '/api/comments/all',
 };
 
-const toString = ({id, content, instant, uploaderUsername}) =
->
-{
+const toString = ({id, content, instant, uploaderUsername}) => {
     let result = '<textarea name="comment" class="text-area-comment area-bg-blur w-75 text-white" rows="7" disabled>';
     result +=
         `
@@ -21,20 +19,15 @@ const toString = ({id, content, instant, uploaderUsername}) =
     <hr class="hr-3"/>
     `
     return result;
-}
-;
+};
 
 fetch(URLS.comments)
-    .then(resp = > resp.json()
-)
-.
-then(comments = > {
-    let result = '';
-comments.forEach(comment = > {
-    result += toString(comment);
-})
-;
+    .then(resp => resp.json())
+    .then(comments => {
+        let result = '';
+        comments.forEach(comment => {
+            result += toString(comment);
+        });
 
-$('#comments-section').html(result);
-})
-;
+        $('#comments-section').html(result);
+    });
