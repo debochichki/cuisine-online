@@ -1,4 +1,4 @@
-package com.softuni.cuisineonline.web.api.models;
+package com.softuni.cuisineonline.web.api.models.comment;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,9 +11,13 @@ import java.time.Instant;
 @NoArgsConstructor
 public class CommentResponseModel {
 
+    private String id;
+
     private String content;
 
     private Instant instant;
 
     private String uploaderUsername;
+
+    private boolean canModify;
 }

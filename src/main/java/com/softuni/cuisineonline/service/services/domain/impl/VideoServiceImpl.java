@@ -65,8 +65,7 @@ public class VideoServiceImpl implements VideoService {
 
     @Override
     public VideoServiceModel getById(String id) {
-        Video video = videoRepository.findById(id).orElseThrow(() ->
-                new MissingEntityException("No video found in the database."));
+        Video video = getVideoById(id);
         VideoServiceModel serviceModel = mappingService.map(video, VideoServiceModel.class);
         serviceModel.setUploaderUsername(getUploaderUsername(video));
         return serviceModel;
@@ -77,8 +76,7 @@ public class VideoServiceImpl implements VideoService {
         validationService.validateEditModel(editModel);
 
         String videoId = editModel.getId();
-        Video video = videoRepository.findById(videoId).orElseThrow(() ->
-                new MissingEntityException("No video found in the database."));
+        Video video = getVideoById(videoId);
 
         String newTitle = editModel.getTitle();
         String newUrl = extractYoutubeVideoId(editModel.getUrl());
@@ -89,9 +87,13 @@ public class VideoServiceImpl implements VideoService {
 
     @Override
     public void delete(String id) {
-        Video video = videoRepository.findById(id).orElseThrow(() ->
-                new MissingEntityException("No video found in the database."));
+        Video video = getVideoById(id);
         videoRepository.delete(video);
+    }
+
+    private Video getVideoById(String id) {
+        return videoRepository.findById(id).orElseThrow(() ->
+                new MissingEntityException("No video found in the database."));
     }
 
     private String getUploaderUsername(Video video) {

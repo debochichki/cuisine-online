@@ -2,7 +2,7 @@ package com.softuni.cuisineonline.web.api.controllers;
 
 import com.softuni.cuisineonline.service.services.domain.CommentService;
 import com.softuni.cuisineonline.service.services.util.MappingService;
-import com.softuni.cuisineonline.web.api.models.CommentResponseModel;
+import com.softuni.cuisineonline.web.api.models.comment.CommentResponseModel;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,7 +24,8 @@ public class CommentApiController {
     }
 
     @GetMapping("/comments/all")
-    public List<CommentResponseModel> getComments() {
+    public List<CommentResponseModel> getAllComments() {
+        // ToDo: Set the canModify field!
         return mappingService.mapAll(commentService.getAll(), CommentResponseModel.class);
     }
 }

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml"
->
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Cuisine Online</title>
@@ -45,23 +45,18 @@
 </header>
 <main>
     <div class="container content-main">
-        <h1 class="text-center text-white">Feedback</h1>
+        <h1 class="text-center text-white">Edit comment</h1>
         <hr class="hr-3"/>
-        <div id="comments-section"></div>
-        <form class="mx-auto" action="/comments/post" method="post">
-            <textarea name="content" class="text-area-comment w-75" rows="7"
-                      placeholder="Enter text here..."></textarea>
+        <form class="mx-auto" action="/comments/edit" method="post">
+            <input type="hidden" name="id" th:value="${comment.id}">
+            <textarea name="content" class="text-area-comment w-75" rows="7" th:text="${comment.content}">
+            </textarea>
             <div class="button-holder d-flex justify-content-center">
-                <button class="btn btn-success text-white mt-3 mb-5" type="submit">Post</button>
+                <button class="btn btn-warning text-white mt-3 mb-5" type="submit">Edit</button>
             </div>
         </form>
     </div>
 </main>
-<script
-        src="https://code.jquery.com/jquery-3.4.1.js"
-        integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
-        crossorigin="anonymous"></script>
-<script src="/js/comments.js"></script>
 <footer class="footer py-2">
     <div class="container-fluid text-center">
         <div class="footer-background h7 text-white">
