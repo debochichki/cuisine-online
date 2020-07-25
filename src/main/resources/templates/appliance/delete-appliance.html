@@ -1,48 +1,9 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Cuisine Online</title>
-    <link rel="stylesheet" href="/css/reset-css.css">
-    <link rel="stylesheet" href="/css/style.css">
-    <link rel="stylesheet" href="/css/bootstrap.min.css">
-</head>
+<th:block th:include="~{fragments/head}"/>
 <body>
-<header>
-    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
-        <a class="navbar-brand text-white h4" href="/home">Cuisine</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#userNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="userNav">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item active">
-                    <a class="nav-link h5" href="/recipes">All Recipes</a>
-                </li>
-                <li class="nav-item active">
-                    <a class="nav-link h5" href="/users">All Users</a>
-                </li>
-                <li class="nav-item active">
-                    <a class="nav-link h5" href="/appliances">All Appliances</a>
-                </li>
-                <li class="nav-item active">
-                    <a class="nav-link h5" href="/recipes-add">Add Recipe</a>
-                </li>
-                <li class="nav-item active">
-                    <a class="nav-link h5" href="/appliances-add">Add Appliance</a>
-                </li>
-                <li class="nav-item active">
-                    <a class="nav-link h5" href="/profile">Profile</a>
-                </li>
-                <li class="nav-item active">
-                    <a class="nav-link h5" href="/logout">Logout</a>
-                </li>
-            </ul>
-        </div>
-    </nav>
-</header>
+<th:block th:include="~{fragments/header}"/>
 <main>
     <div class="content-main">
         <h5 class="text-white text-center">Are you sure you want to delete the appliance?</h5>
@@ -62,12 +23,6 @@
         </div>
     </div>
 </main>
-<footer class="footer py-2">
-    <div class="container-fluid text-center">
-        <div class="footer-background h7 text-white">
-            &#169; CopyRight Cuisine Online. All rights reserved.
-        </div>
-    </div>
-</footer>
+<th:block th:include="~{fragments/footer}"/>
 </body>
 </html>

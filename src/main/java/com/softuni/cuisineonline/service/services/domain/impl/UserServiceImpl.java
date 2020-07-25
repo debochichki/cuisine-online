@@ -3,7 +3,7 @@ package com.softuni.cuisineonline.service.services.domain.impl;
 import com.softuni.cuisineonline.data.models.Profile;
 import com.softuni.cuisineonline.data.models.User;
 import com.softuni.cuisineonline.data.repositories.UserRepository;
-import com.softuni.cuisineonline.errors.NoSuchUserException;
+import com.softuni.cuisineonline.errors.MissingEntityException;
 import com.softuni.cuisineonline.service.services.domain.UserService;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +19,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Profile getUserProfile(final String username) {
         User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new NoSuchUserException("No user with username: " + username));
+                .orElseThrow(() -> new MissingEntityException("No user with username: " + username));
 
         return user.getProfile();
     }

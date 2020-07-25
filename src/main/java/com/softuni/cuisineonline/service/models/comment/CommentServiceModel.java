@@ -17,4 +17,6 @@ public class CommentServiceModel extends BaseServiceModel {
     private Instant instant;
 
     private String uploaderUsername;
+
+    private boolean canModify;
 }

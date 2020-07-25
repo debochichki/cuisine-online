@@ -1,3 +1,36 @@
 <th:block th:fragment>
-    // ToDo: Header nav
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+            <a class="navbar-brand text-white h4" href="/home">Cuisine</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#userNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="userNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link h5" href="/users/all">Users</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link h5" href="/recipes/all">Recipes</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link h5" href="/appliances/all">Appliances</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link h5" href="/videos/all">Videos</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link h5" href="/comments/all">Feedback</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link h5" href="/users/profile">Profile</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link h5" href="/logout">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
 </th:block>

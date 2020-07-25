@@ -1,12 +1,7 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Cuisine Online</title>
-    <link rel="stylesheet" href="/css/reset-css.css">
-    <link rel="stylesheet" href="/css/style.css">
-    <link rel="stylesheet" href="/css/bootstrap.min.css">
-</head>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<th:block th:include="~{fragments/head}"/>
 <body>
 <header>
     <nav class="navbar navbar-expand-lg">
@@ -51,12 +46,6 @@
         </div>
     </form>
 </main>
-<footer class="footer py-2">
-    <div class="container-fluid text-center">
-        <div class="footer-background h7 text-white">
-            &#169; CopyRight Cuisine Online. All rights reserved.
-        </div>
-    </div>
-</footer>
+<th:block th:include="~{fragments/footer}"/>
 </body>
 </html>

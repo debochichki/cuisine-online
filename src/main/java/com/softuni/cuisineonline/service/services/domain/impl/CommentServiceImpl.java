@@ -33,6 +33,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public List<CommentServiceModel> getAll() {
+        // ToDo: Set the canModify field!
         final List<CommentServiceModel> allComments = commentRepository.findAllByOrderByInstantAsc()
                 .stream()
                 .map(c -> {
