@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<th:block th:include="~{fragments/head}"/>
+<body>
+<th:block th:include="~{fragments/header}"/>
+<main>
+    <div class="container content-main">
+        <span class="text-white h1">Recipes</span>
+        <hr class="hr-3"/>
+        <div class="d-flex justify-content-md-start">
+            <div class="label-holder text-white d-flex justify-content-md-start">
+                <label for="recipes-filter-options" class="h4 mb-2">Filter</label>
+            </div>
+            <select id="recipes-filter-options" name="recipes-filter-options">
+                <option value="ALL">ALL</option>
+            </select>
+        </div>
+        <table class="table table-hover bg-blur">
+            <thead>
+            <tr>
+                <th scope="col"><label class="text-white h4">Type</label></th>
+                <th scope="col"><label class="text-white h4">Title</label></th>
+                <th scope="col"><label class="text-white h4">Uploader</label></th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+            </tr>
+            </thead>
+            <tbody id="recipes-table">
+            </tbody>
+        </table>
+        <div class="d-flex justify-content-center">
+            <a href="/recipes/upload" class="btn btn-success">Upload</a>
+        </div>
+    </div>
+</main>
+<script
+        src="https://code.jquery.com/jquery-3.4.1.js"
+        integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+        crossorigin="anonymous"></script>
+<script src="/js/recipes.js"></script>
+<th:block th:include="~{fragments/footer}"/>
+</body>
+</html>

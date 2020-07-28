@@ -36,4 +36,14 @@ public final class InputUtil {
     public static String extractYoutubeVideoId(String URL) {
         return URL.replace(YOU_TUBE_DOMAIN_URL, "").trim();
     }
+
+    public static String[][] parseData(String data, String lineDelimiter, String valueDelimiter) {
+        String[] lines = data.split(lineDelimiter);
+        String[][] result = new String[lines.length][];
+        for (int i = 0; i < lines.length; i++) {
+            result[i] = lines[i].split(valueDelimiter);
+        }
+
+        return result;
+    }
 }

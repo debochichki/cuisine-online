@@ -13,5 +13,5 @@ public interface CloudinaryService {
      */
     Image uploadImage(MultipartFile image);
 
-    void deleteImage(String imageUrl);
+    void deleteImage(String publicId);
 }
