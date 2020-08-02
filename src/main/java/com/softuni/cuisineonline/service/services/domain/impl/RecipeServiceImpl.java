@@ -5,16 +5,19 @@ import com.softuni.cuisineonline.data.repositories.ApplianceRepository;
 import com.softuni.cuisineonline.data.repositories.IngredientRepository;
 import com.softuni.cuisineonline.data.repositories.RecipeRepository;
 import com.softuni.cuisineonline.service.models.ingredient.IngredientCreateServiceModel;
+import com.softuni.cuisineonline.service.models.recipe.RecipeBaseServiceModel;
+import com.softuni.cuisineonline.service.models.recipe.RecipeEditServiceModel;
 import com.softuni.cuisineonline.service.models.recipe.RecipeServiceModel;
 import com.softuni.cuisineonline.service.models.recipe.RecipeUploadServiceModel;
-import com.softuni.cuisineonline.service.services.domain.CloudinaryService;
-import com.softuni.cuisineonline.service.services.domain.IngredientService;
-import com.softuni.cuisineonline.service.services.domain.RecipeService;
-import com.softuni.cuisineonline.service.services.domain.UserService;
+import com.softuni.cuisineonline.service.services.domain.*;
 import com.softuni.cuisineonline.service.services.util.MappingService;
+import com.softuni.cuisineonline.service.services.validation.RecipeValidationService;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -23,6 +26,7 @@ import static com.softuni.cuisineonline.service.services.util.InputUtil.parseDat
 import static java.util.stream.Collectors.toList;
 
 @Service
+@AllArgsConstructor
 public class RecipeServiceImpl implements RecipeService {
 
     private static final String RECIPE_TYPE_ICON_URL_TEMPLATE = "/icon/%s_icon.png";
@@ -32,35 +36,23 @@ public class RecipeServiceImpl implements RecipeService {
     private final ApplianceRepository applianceRepository;
     private final IngredientRepository ingredientRepository;
     private final UserService userService;
+    private final ImageService imageService;
+    // ToDo: Should the image service wrap the cloudinary service? -> I think it should!
     private final IngredientService ingredientService;
     private final MappingService mappingService;
     private final CloudinaryService cloudinaryService;
+    private final RecipeValidationService validationService;
 
-    public RecipeServiceImpl(
-            RecipeRepository recipeRepository,
-            ApplianceRepository applianceRepository,
-            IngredientRepository ingredientRepository,
-            IngredientService ingredientService,
-            UserService userService,
-            MappingService mappingService,
-            CloudinaryService cloudinaryService) {
-        this.recipeRepository = recipeRepository;
-        this.applianceRepository = applianceRepository;
-        this.ingredientRepository = ingredientRepository;
-        this.ingredientService = ingredientService;
-        this.userService = userService;
-        this.mappingService = mappingService;
-        this.cloudinaryService = cloudinaryService;
+    @Override
+    public RecipeServiceModel getById(String id) {
+        Recipe recipe = getRecipeById(id);
+        RecipeServiceModel serviceModel = mappingService.map(recipe, RecipeServiceModel.class);
+        serviceModel.setUploaderUsername(getUploaderUsername(recipe));
+        return serviceModel;
     }
 
     @Override
-    public List<RecipeServiceModel> getAll() {
-        return recipeRepository.findAllByOrderByTitleAsc().stream()
-                .map(this::mapToServiceModel).collect(toList());
-    }
-
-    @Override
-    public List<RecipeServiceModel> getAllByFilterOption(String filterOption) {
+    public List<RecipeBaseServiceModel> getAllByFilterOption(String filterOption) {
         List<Recipe> filteredRecipes = filterOption.equals(ALL_RECIPES_FILTER_OPTION)
                 ? recipeRepository.findAll()
                 : recipeRepository
@@ -71,7 +63,7 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    public List<String> getRecipeTypesAsString() {
+    public List<String> getRecipeTypesAsStringValues() {
         return Arrays.stream(Recipe.Type.values())
                 .map(Enum::toString)
                 .collect(toList());
@@ -81,29 +73,26 @@ public class RecipeServiceImpl implements RecipeService {
     public List<String> getRecipeFilterOptions() {
         List<String> filterOptions = new ArrayList<>();
         filterOptions.add("ALL");
-        filterOptions.addAll(getRecipeTypesAsString());
+        filterOptions.addAll(getRecipeTypesAsStringValues());
         return filterOptions;
     }
 
     @Override
     @Transactional
     public void upload(RecipeUploadServiceModel uploadModel) {
+        validationService.validateUploadModel(uploadModel);
 
+        final Recipe recipe = mappingService.map(uploadModel, Recipe.class);
+
+        List<String> applianceIds = uploadModel.getApplianceIds();
+        List<Appliance> appliances = applianceRepository.findAllByIdIn(applianceIds);
+
+        String ingredientsData = uploadModel.getIngredientsData();
+        List<Ingredient> ingredients = buildIngredients(recipe, ingredientsData);
         Image image = null;
+        Profile profile = userService.getUserProfile(uploadModel.getUploaderUsername());
 
         try {
-            final Recipe recipe = mappingService.map(uploadModel, Recipe.class);
-
-            List<String> applianceIds = uploadModel.getApplianceIds();
-            List<Appliance> appliances = applianceRepository.findAllByIdIn(applianceIds);
-
-            String ingredientList = uploadModel.getIngredientList();
-            List<IngredientCreateServiceModel> ingredientCreateModels =
-                    extractIngredientCreateModels(ingredientList);
-            List<Ingredient> ingredients = mappingService.mapAll(ingredientCreateModels, Ingredient.class);
-            ingredients.forEach(i -> i.setRecipe(recipe));
-
-            Profile profile = userService.getUserProfile(uploadModel.getUploaderUsername());
             image = cloudinaryService.uploadImage(uploadModel.getImage());
 
             recipe.setAppliances(appliances);
@@ -114,18 +103,96 @@ public class RecipeServiceImpl implements RecipeService {
             recipeRepository.save(recipe);
             ingredientRepository.saveAll(ingredients);
         } catch (Exception e) {
-            // Add rollback behaviour for cloudinary image upload
-            if (image != null) {
-                cloudinaryService.deleteImage(image.getPublicId());
-            }
+            // Add rollback behavior for cloudinary image upload
+            handleImageRollback(image);
             throw e;
         }
     }
 
-    private List<IngredientCreateServiceModel> extractIngredientCreateModels(String ingredientList) {
-        String[][] ingredientsData =
-                parseData(ingredientList, System.lineSeparator(), INGREDIENT_TEXT_AREA_VALUE_SEPARATOR);
-        return ingredientService.mapToCreateModels(ingredientsData);
+    @Override
+    @Transactional
+    public void edit(RecipeEditServiceModel editModel) {
+        validationService.validateEditModel(editModel);
+
+        final Recipe recipe = getRecipeById(editModel.getId());
+
+        List<String> applianceIds = editModel.getApplianceIds();
+        List<Appliance> newAppliances = applianceRepository.findAllByIdIn(applianceIds);
+
+        String ingredientsData = editModel.getIngredientsData();
+        List<Ingredient> newIngredients = buildIngredients(recipe, ingredientsData);
+        List<Ingredient> oldIngredients = recipe.getIngredients();
+
+        MultipartFile multipartFile = editModel.getImage();
+        Image newImage = null;
+        Image oldImage = null;
+
+        try {
+            if (!multipartFile.isEmpty()) {
+                newImage = cloudinaryService.uploadImage(multipartFile);
+                oldImage = recipe.getImage();
+                recipe.setImage(newImage);
+            }
+
+            recipe.setTitle(editModel.getTitle());
+            recipe.setType(editModel.getType());
+            recipe.setDescription(editModel.getDescription());
+            recipe.setDuration(editModel.getDuration());
+            recipe.setPortions(editModel.getPortions());
+            recipe.setAppliances(newAppliances);
+            recipe.setIngredients(newIngredients);
+
+            recipeRepository.save(recipe);
+            ingredientRepository.saveAll(newIngredients);
+
+            // Clean up obsolete data
+            ingredientRepository.deleteAll(oldIngredients);
+            handleImageDeletion(oldImage);
+
+        } catch (Exception e) {
+            // Add rollback behavior for cloudinary image upload
+            handleImageRollback(newImage);
+            throw e;
+        }
+    }
+
+    @Override
+    public void deleteById(String id) {
+        Recipe recipe = getRecipeById(id);
+        Image obsoleteImage = recipe.getImage();
+        recipeRepository.deleteById(id);
+        handleImageDeletion(obsoleteImage);
+    }
+
+    private void handleImageRollback(Image image) {
+        if (image != null) {
+            cloudinaryService.deleteImage(image.getPublicId());
+        }
+    }
+
+    private void handleImageDeletion(Image image) {
+        try {
+            if (image != null) {
+                imageService.deleteById(image.getId());
+                cloudinaryService.deleteImage(image.getPublicId());
+            }
+        } catch (Exception ignored) {
+            // Add logging that the deletion of the image failed
+        }
+    }
+
+    private List<Ingredient> buildIngredients(final Recipe recipe, String ingredientsData) {
+        String[][] parsedData =
+                parseData(ingredientsData, System.lineSeparator(),
+                        INGREDIENT_TEXT_AREA_VALUE_SEPARATOR);
+        List<IngredientCreateServiceModel> ingredientCreateModels =
+                ingredientService.mapToCreateModels(parsedData);
+
+        return mappingService
+                .mapAll(ingredientCreateModels, Ingredient.class)
+                .stream()
+                .peek(i -> i.setRecipe(recipe))
+                .collect(toList());
     }
 
     private String resolveIconUrl(Recipe.Type type) {
@@ -136,12 +203,18 @@ public class RecipeServiceImpl implements RecipeService {
         return recipe.getUploader().getUser().getUsername();
     }
 
-    private RecipeServiceModel mapToServiceModel(Recipe recipe) {
-        RecipeServiceModel serviceModel = new RecipeServiceModel();
-        serviceModel.setTitle(recipe.getTitle());
+    private RecipeBaseServiceModel mapToServiceModel(Recipe recipe) {
+        RecipeBaseServiceModel serviceModel = mappingService.map(recipe, RecipeBaseServiceModel.class);
         serviceModel.setUploaderUsername(getUploaderUsername(recipe));
         serviceModel.setTypeIconUrl(resolveIconUrl(recipe.getType()));
+
+        // ToDo: Set the correct value
         serviceModel.setCanModify(true);
         return serviceModel;
+    }
+
+    private Recipe getRecipeById(String id) {
+        return recipeRepository.findById(id).orElseThrow(() ->
+                new EntityNotFoundException("No recipe found in the database."));
     }
 }

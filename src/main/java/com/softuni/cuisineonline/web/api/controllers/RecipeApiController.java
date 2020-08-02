@@ -27,7 +27,7 @@ public class RecipeApiController extends BaseApiController {
 
     @GetMapping("/recipes/types")
     public ResponseEntity<List<String>> getAllTypes() {
-        final List<String> typesAsStrings = recipeService.getRecipeTypesAsString();
+        final List<String> typesAsStrings = recipeService.getRecipeTypesAsStringValues();
         return new ResponseEntity<>(typesAsStrings, HttpStatus.OK);
     }
 
@@ -41,7 +41,8 @@ public class RecipeApiController extends BaseApiController {
     public ResponseEntity<List<RecipeResponseModel>> getAllRecipes(
             @RequestParam(defaultValue = "ALL") String filterOption) {
         final List<RecipeResponseModel> responseModels =
-                mappingService.mapAll(recipeService.getAllByFilterOption(filterOption), RecipeResponseModel.class);
+                mappingService.mapAll(recipeService
+                        .getAllByFilterOption(filterOption), RecipeResponseModel.class);
         return new ResponseEntity<>(responseModels, HttpStatus.OK);
     }
 }

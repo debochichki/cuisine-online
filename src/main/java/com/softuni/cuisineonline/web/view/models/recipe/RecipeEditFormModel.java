@@ -1,7 +1,5 @@
-package com.softuni.cuisineonline.service.models.recipe;
+package com.softuni.cuisineonline.web.view.models.recipe;
 
-import com.softuni.cuisineonline.data.models.Recipe;
-import com.softuni.cuisineonline.service.models.base.BaseServiceModel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,13 +10,15 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-public class RecipeUploadServiceModel extends BaseServiceModel {
+public class RecipeEditFormModel {
+
+    private String id;
 
     private String title;
 
     private MultipartFile image;
 
-    private Recipe.Type type;
+    private String type;
 
     private Integer duration;
 
@@ -30,5 +30,4 @@ public class RecipeUploadServiceModel extends BaseServiceModel {
 
     private String description;
 
-    private String uploaderUsername;
 }

@@ -26,5 +26,5 @@ public class RecipeUploadFormModel {
 
     private String description;
 
-    private String ingredientList;
+    private String ingredientsData;
 }

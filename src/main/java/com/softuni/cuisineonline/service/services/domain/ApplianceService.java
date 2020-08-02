@@ -13,5 +13,5 @@ public interface ApplianceService {
 
     ApplianceServiceModel getById(String id);
 
-    void delete(String id);
+    void deleteById(String id);
 }

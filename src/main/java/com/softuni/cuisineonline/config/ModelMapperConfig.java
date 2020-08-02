@@ -1,7 +1,9 @@
 package com.softuni.cuisineonline.config;
 
 import com.softuni.cuisineonline.data.models.Recipe;
+import com.softuni.cuisineonline.service.models.recipe.RecipeEditServiceModel;
 import com.softuni.cuisineonline.service.models.recipe.RecipeUploadServiceModel;
+import com.softuni.cuisineonline.web.view.models.recipe.RecipeEditFormModel;
 import com.softuni.cuisineonline.web.view.models.recipe.RecipeUploadFormModel;
 import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
@@ -31,6 +33,18 @@ public class ModelMapperConfig {
                         .map(
                                 RecipeUploadFormModel::getType,
                                 RecipeUploadServiceModel::setType
+                        )
+                );
+
+        /**
+         * RecipeEditFormModel to RecipeEditServiceModel mapping configuration
+         */
+        mapper.createTypeMap(RecipeEditFormModel.class, RecipeEditServiceModel.class)
+                .addMappings(map -> map
+                        .using(STRING_TO_RECIPE_TYPE_CONVERTER)
+                        .map(
+                                RecipeEditFormModel::getType,
+                                RecipeEditServiceModel::setType
                         )
                 );
     }

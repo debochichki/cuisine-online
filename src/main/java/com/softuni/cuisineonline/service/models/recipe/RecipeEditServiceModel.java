@@ -12,7 +12,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-public class RecipeUploadServiceModel extends BaseServiceModel {
+public class RecipeEditServiceModel extends BaseServiceModel {
 
     private String title;
 
@@ -30,5 +30,4 @@ public class RecipeUploadServiceModel extends BaseServiceModel {
 
     private String description;
 
-    private String uploaderUsername;
 }

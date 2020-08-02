@@ -1,8 +1,6 @@
 package com.softuni.cuisineonline.data.models.base;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.Column;
@@ -11,9 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import java.io.Serializable;
 
-@Getter
-@Setter
-@NoArgsConstructor
+@Data
 @MappedSuperclass
 public abstract class BaseEntity implements Serializable {
 

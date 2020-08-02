@@ -14,19 +14,24 @@
             <div class="row justify-content-center">
                 <div class="col-md-6">
                     <div class="label mt-2">
-                        <h4 class="text-white text-center">Username: SoulTaker</h4>
+                        <h4 class="text-white text-center"
+                            th:text="'Username:  ' + ${profile.username}"></h4>
                     </div>
                     <div class="label mt-4">
-                        <h4 class="text-white text-center">Rank: NOVICE</h4>
+                        <h4 class="text-white text-center"
+                            th:text="'Rank:  ' + ${profile.rank}"></h4>
                     </div>
                     <div class="label mt-4">
-                        <h4 class="text-white text-center">Recipes uploaded: 2</h4>
+                        <h4 class="text-white text-center"
+                            th:text="'Recipes uploaded:  ' + ${profile.recipesCount}"></h4>
                     </div>
                     <div class="label mt-4">
-                        <h4 class="text-white text-center">Email: staker@abv.bg</h4>
+                        <h4 class="text-white text-center"
+                            th:text="'Email:  ' + ${profile.email}"></h4>
                     </div>
                     <div class="label mt-4">
-                        <h4 class="text-white text-center mb-3">Number: 0855-546-159</h4>
+                        <h4 class="text-white text-center mb-3"
+                            th:text="'Number:  ' + ${profile.telephoneNumber}"></h4>
                     </div>
                     <form method="post" action="/profile/edit/{id}">
                         <div class="button-holder d-flex justify-content-center">

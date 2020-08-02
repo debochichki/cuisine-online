@@ -16,23 +16,17 @@ const toString = ({id, typeIconUrl, title, uploaderUsername, canModify}) => {
         ? '<td></td><td></td>'
         : `
         <td>
-            <form action="/recipes/delete/${id}" method="post">
-                <button class="btn btn-danger">Delete</button>
-            </form>
+            <a href="/recipes/delete/${id}" class="btn btn-danger">Delete</a>
         </td>
         <td>
-            <form action="/recipes/edit/${id}" method="post">
-                <button class="btn btn-warning">Edit</button>
-            </form>
+             <a href="/recipes/edit/${id}" class="btn btn-warning">Edit</a>
         </td>
     `
 
     columns +=
         `
         <td>
-            <form action="/recipes/view/${id}" method="post">
-                <button class="btn btn-success">View</button>
-            </form>
+            <a href="/recipes/view/${id}" class="btn btn-success">View</a>
         </td> 
     `
 

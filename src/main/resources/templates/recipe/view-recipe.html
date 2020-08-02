@@ -5,7 +5,60 @@
 <body>
 <th:block th:include="~{fragments/header}"/>
 <main>
-
+    <div class="container content-main">
+        <h1 class="text-center text-white" th:text="${recipe.title}"></h1>
+        <hr class="hr-3"/>
+        <div class="d-flex justify-content-center">
+            <img th:src="${recipe.imageUrl}" class="img-thumb" width="500" height="500"/>
+        </div>
+        <hr class="hr-3"/>
+        <div class="d-flex justify-content-center">
+            <p class="text-white h4" th:text="'Type:  ' + ${recipe.type}"></p>
+        </div>
+        <hr class="hr-3"/>
+        <div class="d-flex justify-content-center">
+            <p class="text-white h4" th:text="'Duration:  ' + ${recipe.duration} + ' min'"></p>
+        </div>
+        <hr class="hr-3"/>
+        <div class="d-flex justify-content-center">
+            <p class="text-white h4" th:text="'Portions:  ' + ${recipe.portions}"></p>
+        </div>
+        <hr class="hr-3"/>
+        <div class="d-flex justify-content-center">
+            <table class="table table-hover bg-blur">
+                <thead>
+                <tr>
+                    <th scope="col"><label class="text-white h4">Name</label></th>
+                    <th scope="col"><label class="text-white h4">Quantity</label></th>
+                    <th scope="col"><label class="text-white h4">Unit</label></th>
+                </tr>
+                </thead>
+                <tbody>
+                <th:block th:each="ingredient : ${recipe.ingredients}">
+                    <tr>
+                        <td class="text-white h5" th:text="${ingredient.name}"></td>
+                        <td class="text-white h5" th:text="${ingredient.quantity}"></td>
+                        <td class="text-white h5" th:text="${ingredient.unitOfMeasurement}"></td>
+                    </tr>
+                </th:block>
+                </tbody>
+            </table>
+        </div>
+        <hr class="hr-3"/>
+        <div class="d-flex justify-content-center" th:with="appliances=${recipe.appliances}">
+            <p class="text-white h5 mb-5"
+               th:text="'Appliances:  ' + ${#strings.listJoin(appliances.![name], ', ')}"></p>
+        </div>
+        <hr class="hr-3"/>
+        <div class="d-flex justify-content-center">
+            <textarea id="description" name="description" class="text-area-comment form-control" rows="7"
+                      th:text="${recipe.description}" disabled></textarea>
+        </div>
+        <hr class="hr-3"/>
+        <div class="d-flex justify-content-center">
+            <p class="text-white h4 mb-5" th:text="'Uploader:  ' + ${recipe.uploaderUsername}"></p>
+        </div>
+    </div>
 </main>
 <th:block th:include="~{fragments/footer}"/>
 </body>

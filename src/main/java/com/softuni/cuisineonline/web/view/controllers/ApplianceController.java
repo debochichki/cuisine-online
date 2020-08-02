@@ -59,7 +59,7 @@ public class ApplianceController {
 
     @PostMapping("/delete")
     public String delete(@ModelAttribute ApplianceDeleteFormModel deleteModel) {
-        applianceService.delete(deleteModel.getId());
+        applianceService.deleteById(deleteModel.getId());
         return "redirect:/appliances/all";
     }
 
