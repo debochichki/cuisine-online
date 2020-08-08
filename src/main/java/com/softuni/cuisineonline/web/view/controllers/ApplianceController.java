@@ -3,6 +3,7 @@ package com.softuni.cuisineonline.web.view.controllers;
 import com.softuni.cuisineonline.service.models.appliance.ApplianceCreateServiceModel;
 import com.softuni.cuisineonline.service.services.domain.ApplianceService;
 import com.softuni.cuisineonline.service.services.util.MappingService;
+import com.softuni.cuisineonline.web.view.controllers.base.BaseController;
 import com.softuni.cuisineonline.web.view.models.appliance.ApplianceCreateFormModel;
 import com.softuni.cuisineonline.web.view.models.appliance.ApplianceDeleteFormModel;
 import com.softuni.cuisineonline.web.view.models.appliance.ApplianceViewModel;
@@ -14,7 +15,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/appliances")
-public class ApplianceController {
+public class ApplianceController extends BaseController {
 
     private final MappingService mappingService;
     private final ApplianceService applianceService;
@@ -54,13 +55,13 @@ public class ApplianceController {
         ApplianceCreateServiceModel serviceModel =
                 mappingService.map(createModel, ApplianceCreateServiceModel.class);
         applianceService.create(serviceModel);
-        return "redirect:/appliances/all";
+        return redirect("/appliances/all");
     }
 
     @PostMapping("/delete")
     public String delete(@ModelAttribute ApplianceDeleteFormModel deleteModel) {
         applianceService.deleteById(deleteModel.getId());
-        return "redirect:/appliances/all";
+        return redirect("/appliances/all");
     }
 
 }

@@ -3,7 +3,7 @@
       xmlns:th="http://www.thymeleaf.org">
 <th:block th:include="~{fragments/head}"/>
 <body>
-<th:block th:include="~{fragments/header}"/>
+<th:block th:include="~{fragments/header-user}"/>
 <main>
     <div class="content-main">
         <div class="text-center mt-2 mb-4">
@@ -33,11 +33,6 @@
                         <h4 class="text-white text-center mb-3"
                             th:text="'Number:  ' + ${profile.telephoneNumber}"></h4>
                     </div>
-                    <form method="post" action="/profile/edit/{id}">
-                        <div class="button-holder d-flex justify-content-center">
-                            <button class="btn btn-warning text-white mb-3" type="submit">Edit</button>
-                        </div>
-                    </form>
                 </div>
             </div>
         </div>

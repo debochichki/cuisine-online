@@ -15,7 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpSession;
+import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -73,10 +73,10 @@ public class RecipeController extends BaseController {
 
     @PostMapping("/upload")
     public String uploadRecipe(@ModelAttribute RecipeUploadFormModel uploadModel,
-                               HttpSession session) {
+                               Principal principal) {
         RecipeUploadServiceModel serviceModel =
                 mappingService.map(uploadModel, RecipeUploadServiceModel.class);
-        String username = (String) session.getAttribute("username");
+        String username = principal.getName();
         serviceModel.setUploaderUsername(username);
         recipeService.upload(serviceModel);
         return redirect("/recipes");

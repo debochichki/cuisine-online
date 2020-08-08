@@ -1,11 +1,29 @@
 package com.softuni.cuisineonline.service.services.domain;
 
-import com.softuni.cuisineonline.data.models.Profile;
+import com.softuni.cuisineonline.service.models.user.UserProfileServiceModel;
 import com.softuni.cuisineonline.service.models.user.UserServiceModel;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
-public interface UserService {
+import java.util.List;
 
-    Profile getUserProfile(String username);
+public interface UserService extends UserDetailsService {
 
-    UserServiceModel getUserDetails(String username);
+    UserProfileServiceModel getUserProfile(String username);
+
+    @Override
+    UserDetails loadUserByUsername(String s) throws UsernameNotFoundException;
+
+    List<UserServiceModel> getAllUsers();
+
+    void deleteInactiveUsers(int periodInMonths);
+
+    void updateUserLoginDate(String username);
+
+    void updateUserRank(String username);
+
+    void promoteToAdmin(String id);
+
+    void demoteToUser(String id);
 }

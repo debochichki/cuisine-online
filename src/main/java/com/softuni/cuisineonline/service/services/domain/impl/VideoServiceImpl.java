@@ -1,13 +1,14 @@
 package com.softuni.cuisineonline.service.services.domain.impl;
 
 import com.softuni.cuisineonline.data.models.Profile;
+import com.softuni.cuisineonline.data.models.User;
 import com.softuni.cuisineonline.data.models.Video;
+import com.softuni.cuisineonline.data.repositories.UserRepository;
 import com.softuni.cuisineonline.data.repositories.VideoRepository;
 import com.softuni.cuisineonline.errors.MissingEntityException;
 import com.softuni.cuisineonline.service.models.video.VideoEditServiceModel;
 import com.softuni.cuisineonline.service.models.video.VideoServiceModel;
 import com.softuni.cuisineonline.service.models.video.VideoUploadServiceModel;
-import com.softuni.cuisineonline.service.services.domain.UserService;
 import com.softuni.cuisineonline.service.services.domain.VideoService;
 import com.softuni.cuisineonline.service.services.util.MappingService;
 import com.softuni.cuisineonline.service.services.validation.VideoValidationService;
@@ -22,17 +23,17 @@ import static java.util.stream.Collectors.toList;
 public class VideoServiceImpl implements VideoService {
 
     private final VideoRepository videoRepository;
-    private final UserService userService;
+    private final UserRepository userRepository;
     private final MappingService mappingService;
     private final VideoValidationService validationService;
 
     public VideoServiceImpl(
             VideoRepository videoRepository,
-            UserService userService,
+            UserRepository userRepository,
             MappingService mappingService,
             VideoValidationService validationService) {
         this.videoRepository = videoRepository;
-        this.userService = userService;
+        this.userRepository = userRepository;
         this.mappingService = mappingService;
         this.validationService = validationService;
     }
@@ -45,7 +46,7 @@ public class VideoServiceImpl implements VideoService {
         String urlId = extractYoutubeVideoId(uploadModel.getUrl());
         String uploaderUsername = uploadModel.getUploaderUsername();
 
-        Profile uploaderProfile = userService.getUserProfile(uploaderUsername);
+        Profile uploaderProfile = getUserByUsername(uploaderUsername).getProfile();
         Video video = new Video(title, urlId, uploaderProfile);
         videoRepository.save(video);
     }
@@ -89,6 +90,11 @@ public class VideoServiceImpl implements VideoService {
     public void delete(String id) {
         Video video = getVideoById(id);
         videoRepository.delete(video);
+    }
+
+    private User getUserByUsername(final String username) {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new MissingEntityException("No user with username: " + username));
     }
 
     private Video getVideoById(String id) {

@@ -1,20 +1,19 @@
 package com.softuni.cuisineonline.web.view.controllers;
 
-import com.softuni.cuisineonline.service.models.auth.UserLoginServiceModel;
 import com.softuni.cuisineonline.service.models.auth.UserRegisterServiceModel;
 import com.softuni.cuisineonline.service.services.domain.AuthService;
 import com.softuni.cuisineonline.service.services.util.MappingService;
-import com.softuni.cuisineonline.web.view.models.auth.UserLoginFormModel;
+import com.softuni.cuisineonline.web.view.controllers.base.BaseController;
 import com.softuni.cuisineonline.web.view.models.auth.UserRegisterFormModel;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-
-import javax.servlet.http.HttpSession;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
-public class AuthController {
+public class AuthController extends BaseController {
 
     private final MappingService mappingService;
     private final AuthService authService;
@@ -25,7 +24,11 @@ public class AuthController {
     }
 
     @GetMapping("/login")
-    public String getLoginForm() {
+    public String getLoginForm(@RequestParam(required = false) String error, Model model) {
+        if (error != null) {
+            model.addAttribute("error", error);
+        }
+
         return "auth/login.html";
     }
 
@@ -34,21 +37,12 @@ public class AuthController {
         return "auth/register.html";
     }
 
-    @PostMapping("/login")
-    public String login(@ModelAttribute UserLoginFormModel loginModel, HttpSession session) {
-        UserLoginServiceModel serviceModel =
-                mappingService.map(loginModel, UserLoginServiceModel.class);
-        String userUsername = authService.login(serviceModel);
-        session.setAttribute("username", userUsername);
-        return "redirect:/home";
-    }
-
     @PostMapping("/register")
     public String register(@ModelAttribute UserRegisterFormModel registerModel) {
         UserRegisterServiceModel serviceModel =
                 mappingService.map(registerModel, UserRegisterServiceModel.class);
         authService.register(serviceModel);
-        return "redirect:/login";
+        return redirect("/login");
     }
 
 }

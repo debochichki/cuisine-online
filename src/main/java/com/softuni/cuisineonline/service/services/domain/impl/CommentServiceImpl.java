@@ -2,11 +2,13 @@ package com.softuni.cuisineonline.service.services.domain.impl;
 
 import com.softuni.cuisineonline.data.models.Comment;
 import com.softuni.cuisineonline.data.models.Profile;
+import com.softuni.cuisineonline.data.models.User;
 import com.softuni.cuisineonline.data.repositories.CommentRepository;
+import com.softuni.cuisineonline.data.repositories.UserRepository;
+import com.softuni.cuisineonline.errors.MissingEntityException;
 import com.softuni.cuisineonline.service.models.comment.CommentEditServiceModel;
 import com.softuni.cuisineonline.service.models.comment.CommentServiceModel;
 import com.softuni.cuisineonline.service.services.domain.CommentService;
-import com.softuni.cuisineonline.service.services.domain.UserService;
 import com.softuni.cuisineonline.service.services.util.MappingService;
 import org.springframework.stereotype.Service;
 
@@ -20,15 +22,15 @@ public class CommentServiceImpl implements CommentService {
 
     private final CommentRepository commentRepository;
     private final MappingService mappingService;
-    private final UserService userService;
+    private final UserRepository userRepository;
 
     public CommentServiceImpl(
             CommentRepository commentRepository,
             MappingService mappingService,
-            UserService userService) {
+            UserRepository userRepository) {
         this.commentRepository = commentRepository;
         this.mappingService = mappingService;
-        this.userService = userService;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -52,10 +54,9 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    // ToDo: Add interceptor to set the profile!!!
     public void post(CommentServiceModel serviceModel) {
         Comment comment = mappingService.map(serviceModel, Comment.class);
-        Profile profile = userService.getUserProfile(serviceModel.getUploaderUsername());
+        Profile profile = getUserByUsername(serviceModel.getUploaderUsername()).getProfile();
         comment.setUploader(profile);
         commentRepository.save(comment);
     }
@@ -71,6 +72,11 @@ public class CommentServiceImpl implements CommentService {
     public void delete(String id) {
         Comment comment = getCommentById(id);
         commentRepository.delete(comment);
+    }
+
+    private User getUserByUsername(final String username) {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new MissingEntityException("No user with username: " + username));
     }
 
     private Comment getCommentById(String id) {

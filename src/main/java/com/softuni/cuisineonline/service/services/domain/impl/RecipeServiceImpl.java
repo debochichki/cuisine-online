@@ -4,12 +4,17 @@ import com.softuni.cuisineonline.data.models.*;
 import com.softuni.cuisineonline.data.repositories.ApplianceRepository;
 import com.softuni.cuisineonline.data.repositories.IngredientRepository;
 import com.softuni.cuisineonline.data.repositories.RecipeRepository;
+import com.softuni.cuisineonline.data.repositories.UserRepository;
+import com.softuni.cuisineonline.errors.MissingEntityException;
 import com.softuni.cuisineonline.service.models.ingredient.IngredientCreateServiceModel;
 import com.softuni.cuisineonline.service.models.recipe.RecipeBaseServiceModel;
 import com.softuni.cuisineonline.service.models.recipe.RecipeEditServiceModel;
 import com.softuni.cuisineonline.service.models.recipe.RecipeServiceModel;
 import com.softuni.cuisineonline.service.models.recipe.RecipeUploadServiceModel;
-import com.softuni.cuisineonline.service.services.domain.*;
+import com.softuni.cuisineonline.service.services.domain.CloudinaryService;
+import com.softuni.cuisineonline.service.services.domain.ImageService;
+import com.softuni.cuisineonline.service.services.domain.IngredientService;
+import com.softuni.cuisineonline.service.services.domain.RecipeService;
 import com.softuni.cuisineonline.service.services.util.MappingService;
 import com.softuni.cuisineonline.service.services.validation.RecipeValidationService;
 import lombok.AllArgsConstructor;
@@ -35,7 +40,7 @@ public class RecipeServiceImpl implements RecipeService {
     private final RecipeRepository recipeRepository;
     private final ApplianceRepository applianceRepository;
     private final IngredientRepository ingredientRepository;
-    private final UserService userService;
+    private final UserRepository userRepository;
     private final ImageService imageService;
     // ToDo: Should the image service wrap the cloudinary service? -> I think it should!
     private final IngredientService ingredientService;
@@ -85,12 +90,15 @@ public class RecipeServiceImpl implements RecipeService {
         final Recipe recipe = mappingService.map(uploadModel, Recipe.class);
 
         List<String> applianceIds = uploadModel.getApplianceIds();
+        if (applianceIds == null) {
+            applianceIds = new ArrayList<>();
+        }
         List<Appliance> appliances = applianceRepository.findAllByIdIn(applianceIds);
 
         String ingredientsData = uploadModel.getIngredientsData();
         List<Ingredient> ingredients = buildIngredients(recipe, ingredientsData);
         Image image = null;
-        Profile profile = userService.getUserProfile(uploadModel.getUploaderUsername());
+        Profile profile = getUserByUsername(uploadModel.getUploaderUsername()).getProfile();
 
         try {
             image = cloudinaryService.uploadImage(uploadModel.getImage());
@@ -197,6 +205,11 @@ public class RecipeServiceImpl implements RecipeService {
 
     private String resolveIconUrl(Recipe.Type type) {
         return String.format(RECIPE_TYPE_ICON_URL_TEMPLATE, type.toString().toLowerCase());
+    }
+
+    private User getUserByUsername(final String username) {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new MissingEntityException("No user with username: " + username));
     }
 
     private String getUploaderUsername(Recipe recipe) {

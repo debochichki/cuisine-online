@@ -4,6 +4,7 @@ import com.softuni.cuisineonline.service.models.video.VideoEditServiceModel;
 import com.softuni.cuisineonline.service.models.video.VideoUploadServiceModel;
 import com.softuni.cuisineonline.service.services.domain.VideoService;
 import com.softuni.cuisineonline.service.services.util.MappingService;
+import com.softuni.cuisineonline.web.view.controllers.base.BaseController;
 import com.softuni.cuisineonline.web.view.models.video.VideoDeleteFormModel;
 import com.softuni.cuisineonline.web.view.models.video.VideoEditFormModel;
 import com.softuni.cuisineonline.web.view.models.video.VideoUploadFormModel;
@@ -12,12 +13,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpSession;
+import java.security.Principal;
 import java.util.List;
 
 @Controller
 @RequestMapping("/videos")
-public class VideoController {
+public class VideoController extends BaseController {
 
     private final MappingService mappingService;
     private final VideoService videoService;
@@ -63,13 +64,13 @@ public class VideoController {
     }
 
     @PostMapping("/upload")
-    public String uploadVideo(@ModelAttribute VideoUploadFormModel uploadModel, HttpSession session) {
-        String loggedInUserUsername = (String) session.getAttribute("username");
+    public String uploadVideo(@ModelAttribute VideoUploadFormModel uploadModel, Principal principal) {
+        String loggedInUserUsername = principal.getName();
         VideoUploadServiceModel serviceModel =
                 mappingService.map(uploadModel, VideoUploadServiceModel.class);
         serviceModel.setUploaderUsername(loggedInUserUsername);
         videoService.upload(serviceModel);
-        return "redirect:/videos/all";
+        return redirect("/videos/all");
     }
 
     @PostMapping("/edit")
@@ -77,13 +78,13 @@ public class VideoController {
         VideoEditServiceModel serviceModel =
                 mappingService.map(editModel, VideoEditServiceModel.class);
         videoService.edit(serviceModel);
-        return "redirect:/videos/all";
+        return redirect("/videos/all");
     }
 
     @PostMapping("/delete")
     public String deleteVideo(@ModelAttribute VideoDeleteFormModel deleteModel) {
         videoService.delete(deleteModel.getId());
-        return "redirect:/videos/all";
+        return redirect("/videos/all");
     }
 
     private void addViewModel(String id, ModelAndView modelAndView) {

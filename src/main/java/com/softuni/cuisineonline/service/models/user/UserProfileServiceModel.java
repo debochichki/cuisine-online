@@ -8,11 +8,15 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class UserServiceModel extends BaseServiceModel {
+public class UserProfileServiceModel extends BaseServiceModel {
 
     private String username;
 
     private String email;
 
-    private RoleStanding roleStanding;
+    private String telephoneNumber;
+
+    private String rank;
+
+    private int recipesCount;
 }

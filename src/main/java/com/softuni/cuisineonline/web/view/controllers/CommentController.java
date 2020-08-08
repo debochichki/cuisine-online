@@ -12,7 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpSession;
+import java.security.Principal;
 import java.time.Instant;
 
 @Controller
@@ -44,12 +44,12 @@ public class CommentController extends BaseController {
     }
 
     @PostMapping("/post")
-    public String postComment(@ModelAttribute CommentPostFormModel postModel, HttpSession session) {
+    public String postComment(@ModelAttribute CommentPostFormModel postModel, Principal principal) {
         String content = postModel.getContent();
-        String username = (String) session.getAttribute("username");
+        String username = principal.getName();
         CommentServiceModel serviceModel = buildServiceModel(content, username);
         commentService.post(serviceModel);
-        return "redirect:/comments/all";
+        return redirect("/comments/all");
     }
 
     @PostMapping("/edit")

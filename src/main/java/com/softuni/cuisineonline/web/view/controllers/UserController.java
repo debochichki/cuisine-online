@@ -3,13 +3,17 @@ package com.softuni.cuisineonline.web.view.controllers;
 import com.softuni.cuisineonline.service.services.domain.UserService;
 import com.softuni.cuisineonline.service.services.util.MappingService;
 import com.softuni.cuisineonline.web.view.controllers.base.BaseController;
-import com.softuni.cuisineonline.web.view.models.user.UserViewModel;
+import com.softuni.cuisineonline.web.view.models.user.ProfileViewModel;
+import com.softuni.cuisineonline.web.view.models.user.UserRoleViewModel;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpSession;
+import java.security.Principal;
+import java.util.List;
 
 @Controller
 @RequestMapping("/users")
@@ -25,17 +29,33 @@ public class UserController extends BaseController {
     }
 
     @GetMapping("/profile")
-    public ModelAndView getProfile(ModelAndView modelAndView, HttpSession session) {
+    public ModelAndView getProfile(ModelAndView modelAndView, Principal principal) {
         modelAndView.setViewName("user/profile");
-        String username = (String) session.getAttribute("username");
-        UserViewModel viewModel =
-                mappingService.map(userService.getUserDetails(username), UserViewModel.class);
+        String username = principal.getName();
+        ProfileViewModel viewModel =
+                mappingService.map(userService.getUserProfile(username), ProfileViewModel.class);
         modelAndView.addObject("profile", viewModel);
         return modelAndView;
     }
 
     @GetMapping("/all")
-    public String getAllUsers() {
-        return "user/all-users.html";
+    public ModelAndView getAllUsers(ModelAndView modelAndView) {
+        modelAndView.setViewName("user/all-users");
+        List<UserRoleViewModel> viewModels =
+                mappingService.mapAll(userService.getAllUsers(), UserRoleViewModel.class);
+        modelAndView.addObject("users", viewModels);
+        return modelAndView;
+    }
+
+    @PostMapping("/promote/{id}")
+    public String promote(@PathVariable String id) {
+        userService.promoteToAdmin(id);
+        return redirect("/users/all");
+    }
+
+    @PostMapping("/demote/{id}")
+    public String demote(@PathVariable String id) {
+        userService.demoteToUser(id);
+        return redirect("/users/all");
     }
 }

@@ -3,12 +3,11 @@
       xmlns:th="http://www.thymeleaf.org">
 <th:block th:include="~{fragments/head}"/>
 <body>
-<th:block th:include="~{fragments/header}"/>
+<th:block th:include="~{fragments/header-user}"/>
 <main>
     <div class="content-main">
         <div class="text-center mb-3">
-            <span class="text-white mt-2 h4"
-                  th:text="|Welcome, ${session.username}! Here are some of our recipes...|"></span>
+            <span class="text-white mt-2 h4">Here are some of our recipes...</span>
         </div>
         <hr class="my-3"/>
         <div class="row mb-4 d-flex justify-content-around">

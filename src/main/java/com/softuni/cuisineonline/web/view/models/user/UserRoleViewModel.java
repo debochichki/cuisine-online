@@ -1,5 +1,6 @@
 package com.softuni.cuisineonline.web.view.models.user;
 
+import com.softuni.cuisineonline.service.models.user.RoleStanding;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -7,15 +8,14 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class UserViewModel {
+public class UserRoleViewModel {
+
+    private String id;
 
     private String username;
 
     private String email;
 
-    private String telephoneNumber;
+    private RoleStanding roleStanding;
 
-    private String rank;
-
-    private int recipesCount;
 }

@@ -3,7 +3,7 @@
       xmlns:th="http://www.thymeleaf.org">
 <th:block th:include="~{fragments/head}"/>
 <body>
-<th:block th:include="~{fragments/header}"/>
+<th:block th:include="~{fragments/header-user}"/>
 <main>
     <div class="container content-main">
         <span class="text-white h1">All Users</span>
@@ -19,35 +19,28 @@
             </tr>
             </thead>
             <tbody>
-            <tr>
-                <td class="text-white h5">1</td>
-                <td class="text-white h5">SoulTaker</td>
-                <td class="text-white h5">staker@abv.bg</td>
-                <td class="text-white h5">ROOT</td>
-                <td></td>
-            </tr>
-            <tr>
-                <td class="text-white h5">2</td>
-                <td class="text-white h5">Gogo</td>
-                <td class="text-white h5">gogo@abv.bg</td>
-                <td class="text-white h5">USER</td>
-                <td>
-                    <form action="/users/promote/{id}" method="post">
-                        <button class="btn btn-success">Promote</button>
-                    </form>
-                </td>
-            </tr>
-            <tr>
-                <td class="text-white h5">3</td>
-                <td class="text-white h5">Pepo</td>
-                <td class="text-white h5">pepo@abv.bg</td>
-                <td class="text-white h5">ADMIN</td>
-                <td>
-                    <form action="/users/demote/{id}" method="post">
-                        <button class="btn btn-danger">Demote</button>
-                    </form>
-                </td>
-            </tr>
+            <th:block th:each="user, userStat : ${users}">
+                <tr>
+                    <td class="text-white h5" th:text="${userStat.count}"></td>
+                    <td class="text-white h5" th:text="${user.username}"></td>
+                    <td class="text-white h5" th:text="${user.email}"></td>
+                    <td class="text-white h5" th:text="${user.roleStanding.toString()}"></td>
+                    <td>
+                        <th:block th:if="${session.principalRoleStanding.toString().equals('ROOT')}">
+                            <th:block th:if="${user.roleStanding.toString().equals('USER')}">
+                                <form th:action="@{'/users/promote/' + ${user.id}}" method="post">
+                                    <button class="btn btn-success">Promote</button>
+                                </form>
+                            </th:block>
+                            <th:block th:if="${user.roleStanding.toString().equals('ADMIN')}">
+                                <form th:action="@{'/users/demote/' + ${user.id}}" method="post">
+                                    <button class="btn btn-danger">Demote</button>
+                                </form>
+                            </th:block>
+                        </th:block>
+                    </td>
+                </tr>
+            </th:block>
             </tbody>
         </table>
     </div>
