@@ -76,6 +76,14 @@ public class UserServiceImpl implements UserService {
         return serviceModels;
     }
 
+    @Override
+    public List<String> getUserAuthorities(String username) {
+        User user = getUserByUsername(username);
+        return user.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(toList());
+    }
+
     /**
      * Deletes all users that have not logged in for the declared period of time in months
      */

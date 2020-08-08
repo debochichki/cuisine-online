@@ -36,6 +36,29 @@
                 </div>
             </div>
         </div>
+        <hr class="my-3"/>
+        <div class="text-center mt-2 mb-4">
+            <span class="h3 text-white">Rank legend</span>
+        </div>
+        <div class="container w-25">
+            <table class="table table-hover bg-blur">
+                <thead>
+                <tr>
+                    <th scope="col"><label class="text-white h5">Rank</label></th>
+                    <th scope="col"><label class="text-white h5">Recipes</label></th>
+                </tr>
+                </thead>
+                <tbody>
+                <th:block th:each="rank : ${T(com.softuni.cuisineonline.data.models.Rank).values()}">
+                    <tr>
+                        <td class="text-white h6" th:text="${rank.name()}"></td>
+                        <td class="text-white h6" th:text="${rank.getRecipesCount()}"></td>
+                    </tr>
+                </th:block>
+                </tbody>
+            </table>
+        </div>
+        <hr class="my-3"/>
     </div>
 </main>
 <th:block th:include="~{fragments/footer}"/>

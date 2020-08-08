@@ -8,8 +8,9 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
+
+import static java.util.stream.Collectors.toList;
 
 @Component
 public class AuthenticatedUserFacadeImpl implements AuthenticatedUserFacade {
@@ -25,8 +26,11 @@ public class AuthenticatedUserFacadeImpl implements AuthenticatedUserFacade {
     }
 
     @Override
-    public List<? extends GrantedAuthority> getUserAuthorities() {
+    public List<String> getPrincipalAuthorities() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return new ArrayList<>(authentication.getAuthorities());
+        return authentication.getAuthorities()
+                .stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(toList());
     }
 }

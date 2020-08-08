@@ -6,6 +6,8 @@ import com.softuni.cuisineonline.web.interceptors.RoleStandingInterceptor;
 import com.softuni.cuisineonline.web.interceptors.UserRankInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.RedirectStrategy;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -25,10 +27,22 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new RoleStandingInterceptor(authenticationFacade))
+        registry.addInterceptor(roleStandingInterceptor())
                 .addPathPatterns("/users/all");
-        registry.addInterceptor(new UserRankInterceptor(authenticationFacade, userService))
+        registry.addInterceptor(userRankInterceptor())
                 .addPathPatterns("/recipes/upload", "/recipes/delete");
+    }
+
+    @Bean
+    @Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
+    public RoleStandingInterceptor roleStandingInterceptor() {
+        return new RoleStandingInterceptor(authenticationFacade);
+    }
+
+    @Bean
+    @Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
+    public UserRankInterceptor userRankInterceptor() {
+        return new UserRankInterceptor(userService);
     }
 
     @Bean

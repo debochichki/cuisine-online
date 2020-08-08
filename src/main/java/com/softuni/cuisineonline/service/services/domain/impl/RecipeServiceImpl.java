@@ -11,10 +11,8 @@ import com.softuni.cuisineonline.service.models.recipe.RecipeBaseServiceModel;
 import com.softuni.cuisineonline.service.models.recipe.RecipeEditServiceModel;
 import com.softuni.cuisineonline.service.models.recipe.RecipeServiceModel;
 import com.softuni.cuisineonline.service.models.recipe.RecipeUploadServiceModel;
-import com.softuni.cuisineonline.service.services.domain.CloudinaryService;
-import com.softuni.cuisineonline.service.services.domain.ImageService;
-import com.softuni.cuisineonline.service.services.domain.IngredientService;
-import com.softuni.cuisineonline.service.services.domain.RecipeService;
+import com.softuni.cuisineonline.service.models.user.RoleStanding;
+import com.softuni.cuisineonline.service.services.domain.*;
 import com.softuni.cuisineonline.service.services.util.MappingService;
 import com.softuni.cuisineonline.service.services.validation.RecipeValidationService;
 import lombok.AllArgsConstructor;
@@ -41,12 +39,14 @@ public class RecipeServiceImpl implements RecipeService {
     private final ApplianceRepository applianceRepository;
     private final IngredientRepository ingredientRepository;
     private final UserRepository userRepository;
+    private final UserService userService;
     private final ImageService imageService;
     // ToDo: Should the image service wrap the cloudinary service? -> I think it should!
     private final IngredientService ingredientService;
     private final MappingService mappingService;
     private final CloudinaryService cloudinaryService;
     private final RecipeValidationService validationService;
+    private final AuthenticatedUserFacade authenticationFacade;
 
     @Override
     public RecipeServiceModel getById(String id) {
@@ -54,6 +54,11 @@ public class RecipeServiceImpl implements RecipeService {
         RecipeServiceModel serviceModel = mappingService.map(recipe, RecipeServiceModel.class);
         serviceModel.setUploaderUsername(getUploaderUsername(recipe));
         return serviceModel;
+    }
+
+    @Override
+    public String getUploaderUsername(String recipeId) {
+        return getRecipeById(recipeId).getUploader().getUser().getUsername();
     }
 
     @Override
@@ -181,8 +186,8 @@ public class RecipeServiceImpl implements RecipeService {
     private void handleImageDeletion(Image image) {
         try {
             if (image != null) {
-                imageService.deleteById(image.getId());
                 cloudinaryService.deleteImage(image.getPublicId());
+                imageService.deleteById(image.getId());
             }
         } catch (Exception ignored) {
             // Add logging that the deletion of the image failed
@@ -218,12 +223,25 @@ public class RecipeServiceImpl implements RecipeService {
 
     private RecipeBaseServiceModel mapToServiceModel(Recipe recipe) {
         RecipeBaseServiceModel serviceModel = mappingService.map(recipe, RecipeBaseServiceModel.class);
-        serviceModel.setUploaderUsername(getUploaderUsername(recipe));
+        String uploaderUsername = getUploaderUsername(recipe);
+        serviceModel.setUploaderUsername(uploaderUsername);
         serviceModel.setTypeIconUrl(resolveIconUrl(recipe.getType()));
-
-        // ToDo: Set the correct value
-        serviceModel.setCanModify(true);
+        boolean canModify = isOwner(uploaderUsername) || hasAuthorityToModify(uploaderUsername);
+        serviceModel.setCanModify(canModify);
         return serviceModel;
+    }
+
+    private boolean hasAuthorityToModify(String uploaderUsername) {
+        String principalUsername = authenticationFacade.getPrincipalName();
+        RoleStanding principalStanding =
+                RoleStanding.resolve(userService.getUserAuthorities(principalUsername));
+        RoleStanding uploaderStanding =
+                RoleStanding.resolve(userService.getUserAuthorities(uploaderUsername));
+        return principalStanding.compareTo(uploaderStanding) > 0;
+    }
+
+    private boolean isOwner(String uploaderUsername) {
+        return authenticationFacade.getPrincipalName().equals(uploaderUsername);
     }
 
     private Recipe getRecipeById(String id) {

@@ -2,7 +2,7 @@ const URLS = {
     comments: '/api/comments/all',
 };
 
-const toString = ({id, content, instant, uploaderUsername}) => {
+const toString = ({id, content, instant, uploaderUsername, canModify}) => {
     let result = '<textarea name="comment" class="text-area-comment area-bg-blur w-75 text-white" rows="7" disabled>';
     result +=
         `
@@ -10,14 +10,21 @@ const toString = ({id, content, instant, uploaderUsername}) => {
         
         ${content}
     </textarea>
-    <div class="d-flex justify-content-center">
-        <a href="/comments/edit/${id}" class="btn btn-warning">Edit</a>
-        <form  action="/comments/delete/${id}" method="post">
-            <button class="btn btn-danger" type="submit">Delete</a>
-        </form>
-    </div>
-    <hr class="hr-3"/>
-    `
+        `
+
+    if (canModify) {
+        result +=
+            `
+            <div class="d-flex justify-content-center">
+                <a href="/comments/edit/${id}" class="btn btn-warning">Edit</a>
+                <form  action="/comments/delete/${id}" method="post">
+                    <button class="btn btn-danger" type="submit">Delete</a>
+                </form>
+            </div>
+            `
+    }
+
+    result += '<hr class="hr-3"/>'
     return result;
 };
 

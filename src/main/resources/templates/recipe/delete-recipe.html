@@ -60,6 +60,7 @@
         </div>
         <form class="mx-auto w-15" action="/recipes/delete" method="post">
             <input type="hidden" name="id" th:value="${recipe.id}">
+            <input type="hidden" name="uploaderUsername" th:value="${recipe.uploaderUsername}">
             <div class="d-flex justify-content-center">
                 <button class="btn btn-danger text-white mt-3 mb-5" type="submit">Delete</button>
             </div>

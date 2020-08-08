@@ -8,7 +8,10 @@ import com.softuni.cuisineonline.data.repositories.UserRepository;
 import com.softuni.cuisineonline.errors.MissingEntityException;
 import com.softuni.cuisineonline.service.models.comment.CommentEditServiceModel;
 import com.softuni.cuisineonline.service.models.comment.CommentServiceModel;
+import com.softuni.cuisineonline.service.models.user.RoleStanding;
+import com.softuni.cuisineonline.service.services.domain.AuthenticatedUserFacade;
 import com.softuni.cuisineonline.service.services.domain.CommentService;
+import com.softuni.cuisineonline.service.services.domain.UserService;
 import com.softuni.cuisineonline.service.services.util.MappingService;
 import org.springframework.stereotype.Service;
 
@@ -23,29 +26,49 @@ public class CommentServiceImpl implements CommentService {
     private final CommentRepository commentRepository;
     private final MappingService mappingService;
     private final UserRepository userRepository;
+    private final UserService userService;
+    private final AuthenticatedUserFacade authenticationFacade;
 
     public CommentServiceImpl(
             CommentRepository commentRepository,
             MappingService mappingService,
-            UserRepository userRepository) {
+            UserRepository userRepository,
+            UserService userService,
+            AuthenticatedUserFacade authenticationFacade) {
         this.commentRepository = commentRepository;
         this.mappingService = mappingService;
         this.userRepository = userRepository;
+        this.userService = userService;
+        this.authenticationFacade = authenticationFacade;
     }
 
     @Override
     public List<CommentServiceModel> getAll() {
-        // ToDo: Set the canModify field!
         final List<CommentServiceModel> allComments = commentRepository.findAllByOrderByInstantAsc()
                 .stream()
                 .map(c -> {
                     CommentServiceModel serviceModel = mappingService.map(c, CommentServiceModel.class);
                     String username = getUploaderUsername(c);
                     serviceModel.setUploaderUsername(username);
+                    boolean canModify = isOwner(username) || hasAuthorityToModify(username);
+                    serviceModel.setCanModify(canModify);
                     return serviceModel;
                 }).collect(toList());
 
         return allComments;
+    }
+
+    private boolean hasAuthorityToModify(String uploaderUsername) {
+        String principalUsername = authenticationFacade.getPrincipalName();
+        RoleStanding principalStanding =
+                RoleStanding.resolve(userService.getUserAuthorities(principalUsername));
+        RoleStanding uploaderStanding =
+                RoleStanding.resolve(userService.getUserAuthorities(uploaderUsername));
+        return principalStanding.compareTo(uploaderStanding) > 0;
+    }
+
+    private boolean isOwner(String uploaderUsername) {
+        return authenticationFacade.getPrincipalName().equals(uploaderUsername);
     }
 
     @Override

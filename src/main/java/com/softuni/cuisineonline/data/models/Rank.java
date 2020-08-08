@@ -3,6 +3,7 @@ package com.softuni.cuisineonline.data.models;
 import com.softuni.cuisineonline.errors.ServerException;
 
 import java.util.Arrays;
+import java.util.Comparator;
 
 public enum Rank {
     NOVICE(0),
@@ -27,8 +28,8 @@ public enum Rank {
         }
 
         return Arrays.stream(Rank.values())
-                .filter(r -> r.getRecipesCount() >= uploadedRecipes)
-                .findFirst()
+                .filter(r -> uploadedRecipes >= r.getRecipesCount())
+                .max(Comparator.comparing(Rank::getRecipesCount))
                 .orElseThrow(() ->
                         new ServerException(
                                 "Could not resolve user rank with argument: "

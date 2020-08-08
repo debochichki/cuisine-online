@@ -11,6 +11,8 @@ public interface RecipeService {
 
     RecipeServiceModel getById(String id);
 
+    String getUploaderUsername(String recipeId);
+
     List<RecipeBaseServiceModel> getAllByFilterOption(String filterOption);
 
     List<String> getRecipeTypesAsStringValues();

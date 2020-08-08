@@ -66,6 +66,7 @@
                 <textarea id="ingredientsData" name="ingredientsData" class="text-area-comment form-control" rows="7"
                           placeholder="Enter ingredient in format: name, quantity, unit of measurement"></textarea>
             </div>
+            <input type="hidden" name="uploaderUsername" th:value="${#authentication.getName()}">
             <div class="button-holder d-flex justify-content-center">
                 <button class="btn btn-success text-white mt-3 mb-5" type="submit">Upload</button>
             </div>
