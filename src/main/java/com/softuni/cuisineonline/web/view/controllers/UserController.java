@@ -5,6 +5,7 @@ import com.softuni.cuisineonline.service.services.util.MappingService;
 import com.softuni.cuisineonline.web.view.controllers.base.BaseController;
 import com.softuni.cuisineonline.web.view.models.user.ProfileViewModel;
 import com.softuni.cuisineonline.web.view.models.user.UserRoleViewModel;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -38,6 +39,7 @@ public class UserController extends BaseController {
         return modelAndView;
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/all")
     public ModelAndView getAllUsers(ModelAndView modelAndView) {
         modelAndView.setViewName("user/all-users");

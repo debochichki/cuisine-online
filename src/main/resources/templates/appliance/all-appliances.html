@@ -1,21 +1,26 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <th:block th:include="~{fragments/head}"/>
 <body>
 <th:block th:include="~{fragments/header-user}"/>
 <main>
-    <div class="content-main">
+    <div class="container content-main">
         <span class="text-white h1">Appliances</span>
         <hr class="hr-3"/>
         <div class="row mb-4 d-flex justify-content-around">
-            <th:block th:each="appliance : ${appliances}">
-                <div class="col-md-3 d-flex flex-column text-center mb-3">
+            <th:block th:each="appliance, applianceStat : ${appliances}">
+                <div class="col-md-4 d-flex flex-column text-center mb-3">
                     <img th:src="${appliance.imageUrl}" class="img-thumb" width="350" height="350"/>
                     <h5 class="text-white text-center" th:text="${appliance.name}"></h5>
-                    <a class="btn btn-danger mb-2" th:href="@{'/appliances/delete/' + ${appliance.id}}">Delete</a>
+                    <a sec:authorize="hasAuthority('ADMIN')" class="btn btn-danger mb-2"
+                       th:href="@{'/appliances/delete/' + ${appliance.id}}">Delete</a>
                 </div>
             </th:block>
+        </div>
+        <div sec:authorize="hasAuthority('ADMIN')" class="d-flex justify-content-center">
+            <a href="/appliances/create" class="btn btn-success text-white mt-3 mb-5">Create</a>
         </div>
     </div>
 </main>

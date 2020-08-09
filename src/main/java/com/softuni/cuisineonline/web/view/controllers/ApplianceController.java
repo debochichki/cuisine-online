@@ -7,6 +7,7 @@ import com.softuni.cuisineonline.web.view.controllers.base.BaseController;
 import com.softuni.cuisineonline.web.view.models.appliance.ApplianceCreateFormModel;
 import com.softuni.cuisineonline.web.view.models.appliance.ApplianceDeleteFormModel;
 import com.softuni.cuisineonline.web.view.models.appliance.ApplianceViewModel;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -36,11 +37,13 @@ public class ApplianceController extends BaseController {
         return modelAndView;
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/create")
     public String getCreateForm() {
         return "appliance/create-appliance.html";
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/delete/{id}")
     public ModelAndView getDeleteForm(@PathVariable String id, ModelAndView modelAndView) {
         modelAndView.setViewName("appliance/delete-appliance");
@@ -50,6 +53,7 @@ public class ApplianceController extends BaseController {
         return modelAndView;
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/create")
     public String create(@ModelAttribute ApplianceCreateFormModel createModel) {
         ApplianceCreateServiceModel serviceModel =
@@ -58,6 +62,7 @@ public class ApplianceController extends BaseController {
         return redirect("/appliances/all");
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/delete")
     public String delete(@ModelAttribute ApplianceDeleteFormModel deleteModel) {
         applianceService.deleteById(deleteModel.getId());

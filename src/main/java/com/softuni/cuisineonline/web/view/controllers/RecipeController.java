@@ -53,6 +53,7 @@ public class RecipeController extends BaseController {
         return modelAndView;
     }
 
+    // ToDo: Add custom security validation to prevent unwanted access
     @GetMapping("/edit/{id}")
     public ModelAndView getEditForm(@PathVariable String id, ModelAndView modelAndView) {
         modelAndView.setViewName("recipe/edit-recipe");

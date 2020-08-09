@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <th:block th:include="~{fragments/head}"/>
 <body>
 <th:block th:include="~{fragments/header-user}"/>
@@ -24,10 +25,12 @@
                     <td class="text-white h5" th:text="${video.title}"></td>
                     <td class="text-white h5" th:text="${video.uploaderUsername}"></td>
                     <td>
-                        <a th:href="@{'/videos/delete/' + ${video.id}}" class="btn btn-danger">Delete</a>
+                        <a sec:authorize="hasAuthority('ADMIN')"
+                           th:href="@{'/videos/delete/' + ${video.id}}" class="btn btn-danger">Delete</a>
                     </td>
                     <td>
-                        <a th:href="@{'/videos/edit/' + ${video.id}}" class="btn btn-warning">Edit</a>
+                        <a sec:authorize="hasAuthority('ADMIN')"
+                           th:href="@{'/videos/edit/' + ${video.id}}" class="btn btn-warning">Edit</a>
                     </td>
                     <td>
                         <a th:href="@{'/videos/view/' + ${video.id}}" class="btn btn-success">View</a>
@@ -36,6 +39,10 @@
             </th:block>
             </tbody>
         </table>
+        <div class="d-flex justify-content-center">
+            <a sec:authorize="hasAuthority('ADMIN')" href="/videos/upload"
+               class="btn btn-success text-white mt-3 mb-5">Upload</a>
+        </div>
     </div>
 </main>
 <th:block th:include="~{fragments/footer}"/>

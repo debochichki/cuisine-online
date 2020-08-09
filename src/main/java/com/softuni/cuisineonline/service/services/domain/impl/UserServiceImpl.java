@@ -138,6 +138,24 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
     }
 
+    @Override
+    public boolean canModify(String principalName, String uploaderUsername) {
+        return isOwner(principalName, uploaderUsername) ||
+                hasAuthorityToModify(principalName, uploaderUsername);
+    }
+
+    private boolean isOwner(String principalName, String uploaderUsername) {
+        return principalName.equals(uploaderUsername);
+    }
+
+    private boolean hasAuthorityToModify(String principalName, String uploaderUsername) {
+        RoleStanding principalStanding =
+                RoleStanding.resolve(getUserAuthorities(principalName));
+        RoleStanding uploaderStanding =
+                RoleStanding.resolve(getUserAuthorities(uploaderUsername));
+        return principalStanding.compareTo(uploaderStanding) > 0;
+    }
+
     private User getUserById(final String userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new MissingEntityException("No user with id: " + userId));

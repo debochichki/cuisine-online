@@ -28,4 +28,6 @@ public interface UserService extends UserDetailsService {
     void promoteToAdmin(String id);
 
     void demoteToUser(String id);
+
+    boolean canModify(String principalName, String uploaderUsername);
 }

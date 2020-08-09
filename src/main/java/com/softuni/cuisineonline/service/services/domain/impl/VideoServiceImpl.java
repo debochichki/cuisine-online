@@ -9,6 +9,7 @@ import com.softuni.cuisineonline.errors.MissingEntityException;
 import com.softuni.cuisineonline.service.models.video.VideoEditServiceModel;
 import com.softuni.cuisineonline.service.models.video.VideoServiceModel;
 import com.softuni.cuisineonline.service.models.video.VideoUploadServiceModel;
+import com.softuni.cuisineonline.service.services.domain.UserService;
 import com.softuni.cuisineonline.service.services.domain.VideoService;
 import com.softuni.cuisineonline.service.services.util.MappingService;
 import com.softuni.cuisineonline.service.services.validation.VideoValidationService;
@@ -26,16 +27,21 @@ public class VideoServiceImpl implements VideoService {
     private final UserRepository userRepository;
     private final MappingService mappingService;
     private final VideoValidationService validationService;
+    private final AuthenticatedUserFacadeImpl authenticationFacade;
+    private final UserService userService;
 
     public VideoServiceImpl(
             VideoRepository videoRepository,
             UserRepository userRepository,
             MappingService mappingService,
-            VideoValidationService validationService) {
+            VideoValidationService validationService,
+            AuthenticatedUserFacadeImpl authenticationFacade, UserService userService) {
         this.videoRepository = videoRepository;
         this.userRepository = userRepository;
         this.mappingService = mappingService;
         this.validationService = validationService;
+        this.authenticationFacade = authenticationFacade;
+        this.userService = userService;
     }
 
     @Override
@@ -56,8 +62,8 @@ public class VideoServiceImpl implements VideoService {
         final List<VideoServiceModel> allVideos = videoRepository.findAll().stream()
                 .map(v -> {
                     VideoServiceModel serviceModel = mappingService.map(v, VideoServiceModel.class);
-                    String username = getUploaderUsername(v);
-                    serviceModel.setUploaderUsername(username);
+                    String uploaderUsername = getUploaderUsername(v);
+                    serviceModel.setUploaderUsername(uploaderUsername);
                     return serviceModel;
                 }).collect(toList());
 

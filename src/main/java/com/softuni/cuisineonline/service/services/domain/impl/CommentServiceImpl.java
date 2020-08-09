@@ -8,7 +8,6 @@ import com.softuni.cuisineonline.data.repositories.UserRepository;
 import com.softuni.cuisineonline.errors.MissingEntityException;
 import com.softuni.cuisineonline.service.models.comment.CommentEditServiceModel;
 import com.softuni.cuisineonline.service.models.comment.CommentServiceModel;
-import com.softuni.cuisineonline.service.models.user.RoleStanding;
 import com.softuni.cuisineonline.service.services.domain.AuthenticatedUserFacade;
 import com.softuni.cuisineonline.service.services.domain.CommentService;
 import com.softuni.cuisineonline.service.services.domain.UserService;
@@ -48,27 +47,15 @@ public class CommentServiceImpl implements CommentService {
                 .stream()
                 .map(c -> {
                     CommentServiceModel serviceModel = mappingService.map(c, CommentServiceModel.class);
-                    String username = getUploaderUsername(c);
-                    serviceModel.setUploaderUsername(username);
-                    boolean canModify = isOwner(username) || hasAuthorityToModify(username);
+                    String uploaderUsername = getUploaderUsername(c);
+                    serviceModel.setUploaderUsername(uploaderUsername);
+                    String principalName = authenticationFacade.getPrincipalName();
+                    boolean canModify = userService.canModify(principalName, uploaderUsername);
                     serviceModel.setCanModify(canModify);
                     return serviceModel;
                 }).collect(toList());
 
         return allComments;
-    }
-
-    private boolean hasAuthorityToModify(String uploaderUsername) {
-        String principalUsername = authenticationFacade.getPrincipalName();
-        RoleStanding principalStanding =
-                RoleStanding.resolve(userService.getUserAuthorities(principalUsername));
-        RoleStanding uploaderStanding =
-                RoleStanding.resolve(userService.getUserAuthorities(uploaderUsername));
-        return principalStanding.compareTo(uploaderStanding) > 0;
-    }
-
-    private boolean isOwner(String uploaderUsername) {
-        return authenticationFacade.getPrincipalName().equals(uploaderUsername);
     }
 
     @Override

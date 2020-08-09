@@ -11,7 +11,6 @@ import com.softuni.cuisineonline.service.models.recipe.RecipeBaseServiceModel;
 import com.softuni.cuisineonline.service.models.recipe.RecipeEditServiceModel;
 import com.softuni.cuisineonline.service.models.recipe.RecipeServiceModel;
 import com.softuni.cuisineonline.service.models.recipe.RecipeUploadServiceModel;
-import com.softuni.cuisineonline.service.models.user.RoleStanding;
 import com.softuni.cuisineonline.service.services.domain.*;
 import com.softuni.cuisineonline.service.services.util.MappingService;
 import com.softuni.cuisineonline.service.services.validation.RecipeValidationService;
@@ -226,23 +225,12 @@ public class RecipeServiceImpl implements RecipeService {
         String uploaderUsername = getUploaderUsername(recipe);
         serviceModel.setUploaderUsername(uploaderUsername);
         serviceModel.setTypeIconUrl(resolveIconUrl(recipe.getType()));
-        boolean canModify = isOwner(uploaderUsername) || hasAuthorityToModify(uploaderUsername);
+        String principalName = authenticationFacade.getPrincipalName();
+        boolean canModify = userService.canModify(principalName, uploaderUsername);
         serviceModel.setCanModify(canModify);
         return serviceModel;
     }
 
-    private boolean hasAuthorityToModify(String uploaderUsername) {
-        String principalUsername = authenticationFacade.getPrincipalName();
-        RoleStanding principalStanding =
-                RoleStanding.resolve(userService.getUserAuthorities(principalUsername));
-        RoleStanding uploaderStanding =
-                RoleStanding.resolve(userService.getUserAuthorities(uploaderUsername));
-        return principalStanding.compareTo(uploaderStanding) > 0;
-    }
-
-    private boolean isOwner(String uploaderUsername) {
-        return authenticationFacade.getPrincipalName().equals(uploaderUsername);
-    }
 
     private Recipe getRecipeById(String id) {
         return recipeRepository.findById(id).orElseThrow(() ->

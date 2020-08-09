@@ -9,6 +9,7 @@ import com.softuni.cuisineonline.web.view.models.video.VideoDeleteFormModel;
 import com.softuni.cuisineonline.web.view.models.video.VideoEditFormModel;
 import com.softuni.cuisineonline.web.view.models.video.VideoUploadFormModel;
 import com.softuni.cuisineonline.web.view.models.video.VideoViewModel;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -37,6 +38,7 @@ public class VideoController extends BaseController {
         return modelAndView;
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/upload")
     public String getUploadForm() {
         return "video/upload-video";
@@ -49,6 +51,7 @@ public class VideoController extends BaseController {
         return modelAndView;
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/edit/{id}")
     public ModelAndView getEditForm(@PathVariable String id, ModelAndView modelAndView) {
         modelAndView.setViewName("video/edit-video");
@@ -56,6 +59,7 @@ public class VideoController extends BaseController {
         return modelAndView;
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/delete/{id}")
     public ModelAndView getDeleteForm(@PathVariable String id, ModelAndView modelAndView) {
         modelAndView.setViewName("video/delete-video");
@@ -63,6 +67,7 @@ public class VideoController extends BaseController {
         return modelAndView;
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/upload")
     public String uploadVideo(@ModelAttribute VideoUploadFormModel uploadModel, Principal principal) {
         String loggedInUserUsername = principal.getName();
@@ -73,6 +78,7 @@ public class VideoController extends BaseController {
         return redirect("/videos/all");
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/edit")
     public String editVideo(@ModelAttribute VideoEditFormModel editModel) {
         VideoEditServiceModel serviceModel =
@@ -81,6 +87,7 @@ public class VideoController extends BaseController {
         return redirect("/videos/all");
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/delete")
     public String deleteVideo(@ModelAttribute VideoDeleteFormModel deleteModel) {
         videoService.delete(deleteModel.getId());
