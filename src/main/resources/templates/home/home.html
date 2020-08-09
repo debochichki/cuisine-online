@@ -11,18 +11,14 @@
         </div>
         <hr class="my-3"/>
         <div class="row mb-4 d-flex justify-content-around">
-            <div class="col-md-3 d-flex flex-column text-center mb-3">
-                <img src="img/pizza.jpg" class="img-thumb" width="350" height="350"/>
-                <h5 class="text-white text-center">Pizza</h5>
-            </div>
-            <div class="col-md-3 d-flex flex-column text-center mb-3">
-                <img src="img/spaghetti.jpg" class="img-thumb" width="350" height="350"/>
-                <h5 class="text-white text-center">Pasta</h5>
-            </div>
-            <div class="col-md-3 d-flex flex-column text-center mb-3">
-                <img src="img/salad.jpg" class="img-thumb" width="350" height="350"/>
-                <h5 class="text-white text-center">Salad</h5>
-            </div>
+            <th:block th:each="recipe : ${recipes}">
+                <div class="col-md-3 d-flex flex-column text-center mb-3">
+                    <img th:src="${recipe.imageUrl}" class="img-thumb" width="350" height="350"/>
+                    <a class="text-white text-center h5"
+                       th:href="@{'/recipes/view/' + ${recipe.id}}"
+                       th:text="${recipe.title}"></a>
+                </div>
+            </th:block>
         </div>
     </div>
 </main>

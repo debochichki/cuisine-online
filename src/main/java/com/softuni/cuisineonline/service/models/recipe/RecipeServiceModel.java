@@ -3,15 +3,13 @@ package com.softuni.cuisineonline.service.models.recipe;
 import com.softuni.cuisineonline.service.models.appliance.ApplianceServiceModel;
 import com.softuni.cuisineonline.service.models.base.BaseServiceModel;
 import com.softuni.cuisineonline.service.models.ingredient.IngredientServiceModel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.List;
 
-@Getter
-@Setter
-@NoArgsConstructor
+@Data
+@EqualsAndHashCode(callSuper = true)
 public class RecipeServiceModel extends BaseServiceModel {
 
     private String title;
@@ -32,3 +30,4 @@ public class RecipeServiceModel extends BaseServiceModel {
 
     private String uploaderUsername;
 }
+

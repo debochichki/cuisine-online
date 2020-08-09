@@ -23,6 +23,7 @@ import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 import static com.softuni.cuisineonline.service.services.util.InputUtil.parseData;
 import static java.util.stream.Collectors.toList;
@@ -40,7 +41,6 @@ public class RecipeServiceImpl implements RecipeService {
     private final UserRepository userRepository;
     private final UserService userService;
     private final ImageService imageService;
-    // ToDo: Should the image service wrap the cloudinary service? -> I think it should!
     private final IngredientService ingredientService;
     private final MappingService mappingService;
     private final CloudinaryService cloudinaryService;
@@ -53,11 +53,6 @@ public class RecipeServiceImpl implements RecipeService {
         RecipeServiceModel serviceModel = mappingService.map(recipe, RecipeServiceModel.class);
         serviceModel.setUploaderUsername(getUploaderUsername(recipe));
         return serviceModel;
-    }
-
-    @Override
-    public String getUploaderUsername(String recipeId) {
-        return getRecipeById(recipeId).getUploader().getUser().getUsername();
     }
 
     @Override
@@ -174,6 +169,29 @@ public class RecipeServiceImpl implements RecipeService {
         Image obsoleteImage = recipe.getImage();
         recipeRepository.deleteById(id);
         handleImageDeletion(obsoleteImage);
+    }
+
+    @Override
+    public List<RecipeServiceModel> getRandomRecipes(int numberOfRecipes) {
+        List<Recipe> all = recipeRepository.findAll();
+        if (all.size() < numberOfRecipes) {
+            numberOfRecipes = all.size();
+        }
+
+        List<RecipeServiceModel> serviceModels = new ArrayList<>();
+        Random random = new Random();
+        int counter = 0;
+        while (counter < numberOfRecipes) {
+            int rndIndex = random.nextInt(all.size());
+            RecipeServiceModel serviceModel =
+                    mappingService.map(all.get(rndIndex), RecipeServiceModel.class);
+            if (!serviceModels.contains(serviceModel)) {
+                serviceModels.add(serviceModel);
+                counter++;
+            }
+        }
+
+        return serviceModels;
     }
 
     private void handleImageRollback(Image image) {

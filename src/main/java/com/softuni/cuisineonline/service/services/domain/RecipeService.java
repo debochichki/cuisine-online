@@ -11,8 +11,6 @@ public interface RecipeService {
 
     RecipeServiceModel getById(String id);
 
-    String getUploaderUsername(String recipeId);
-
     List<RecipeBaseServiceModel> getAllByFilterOption(String filterOption);
 
     List<String> getRecipeTypesAsStringValues();
@@ -24,4 +22,6 @@ public interface RecipeService {
     void edit(RecipeEditServiceModel editModel);
 
     void deleteById(String id);
+
+    List<RecipeServiceModel> getRandomRecipes(int numberOfRecipes);
 }
