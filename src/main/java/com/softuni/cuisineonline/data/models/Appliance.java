@@ -1,8 +1,10 @@
 package com.softuni.cuisineonline.data.models;
 
 import com.softuni.cuisineonline.data.models.base.BaseEntity;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -12,6 +14,8 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "appliances")
+@NoArgsConstructor
+@AllArgsConstructor
 public class Appliance extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 1000L;

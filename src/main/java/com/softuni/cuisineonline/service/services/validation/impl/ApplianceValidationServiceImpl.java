@@ -31,7 +31,7 @@ public class ApplianceValidationServiceImpl implements ApplianceValidationServic
                             TITLE_LENGTH_UPPER_BOUND));
         }
 
-        if (multipartFile.isEmpty()) {
+        if (multipartFile == null || multipartFile.isEmpty()) {
             throw new ValidationException("You must specify an image file.");
         }
     }

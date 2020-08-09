@@ -28,7 +28,7 @@ public class RecipeValidationServiceImpl implements RecipeValidationService {
     @Override
     public void validateUploadModel(RecipeUploadServiceModel uploadModel) {
         MultipartFile image = uploadModel.getImage();
-        if (image.isEmpty()) {
+        if (image == null || image.isEmpty()) {
             throw new ValidationException("You must specify an image file.");
         }
 

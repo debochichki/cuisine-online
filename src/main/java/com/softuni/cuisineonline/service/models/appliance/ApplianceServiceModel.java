@@ -2,12 +2,12 @@ package com.softuni.cuisineonline.service.models.appliance;
 
 import com.softuni.cuisineonline.service.models.base.BaseServiceModel;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Getter
-@Setter
+@EqualsAndHashCode(callSuper = true)
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class ApplianceServiceModel extends BaseServiceModel {
