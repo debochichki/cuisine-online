@@ -10,6 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import java.io.Serializable;
+import java.util.Objects;
 import java.util.Set;
 
 @Getter
@@ -28,5 +29,19 @@ public class Role extends BaseEntity implements GrantedAuthority, Serializable {
 
     public Role(String authority) {
         this.authority = authority;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        Role role = (Role) o;
+        return Objects.equals(authority, role.authority);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), authority);
     }
 }

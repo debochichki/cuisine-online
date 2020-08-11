@@ -12,6 +12,7 @@ import com.softuni.cuisineonline.service.services.domain.AuthenticatedUserFacade
 import com.softuni.cuisineonline.service.services.domain.CommentService;
 import com.softuni.cuisineonline.service.services.domain.UserService;
 import com.softuni.cuisineonline.service.services.util.MappingService;
+import com.softuni.cuisineonline.service.services.validation.CommentValidationService;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -27,18 +28,21 @@ public class CommentServiceImpl implements CommentService {
     private final UserRepository userRepository;
     private final UserService userService;
     private final AuthenticatedUserFacade authenticationFacade;
+    private final CommentValidationService validationService;
 
     public CommentServiceImpl(
             CommentRepository commentRepository,
             MappingService mappingService,
             UserRepository userRepository,
             UserService userService,
-            AuthenticatedUserFacade authenticationFacade) {
+            AuthenticatedUserFacade authenticationFacade,
+            CommentValidationService validationService) {
         this.commentRepository = commentRepository;
         this.mappingService = mappingService;
         this.userRepository = userRepository;
         this.userService = userService;
         this.authenticationFacade = authenticationFacade;
+        this.validationService = validationService;
     }
 
     @Override
@@ -65,6 +69,8 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public void post(CommentServiceModel serviceModel) {
+        validationService.validatePostModel(serviceModel);
+
         Comment comment = mappingService.map(serviceModel, Comment.class);
         Profile profile = getUserByUsername(serviceModel.getUploaderUsername()).getProfile();
         comment.setUploader(profile);
@@ -73,6 +79,8 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public void edit(CommentEditServiceModel serviceModel) {
+        validationService.validateEditModel(serviceModel);
+
         Comment comment = getCommentById(serviceModel.getId());
         comment.setContent(serviceModel.getContent());
         commentRepository.save(comment);

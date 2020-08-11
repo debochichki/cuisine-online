@@ -173,6 +173,7 @@ public class RecipeServiceImpl implements RecipeService {
 
     @Override
     public List<RecipeServiceModel> getRandomRecipes(int numberOfRecipes) {
+        // ToDo: Fix - it returns duplicates
         List<Recipe> all = recipeRepository.findAll();
         if (all.size() < numberOfRecipes) {
             numberOfRecipes = all.size();

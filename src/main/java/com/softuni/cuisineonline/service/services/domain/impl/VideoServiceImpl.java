@@ -9,6 +9,7 @@ import com.softuni.cuisineonline.errors.MissingEntityException;
 import com.softuni.cuisineonline.service.models.video.VideoEditServiceModel;
 import com.softuni.cuisineonline.service.models.video.VideoServiceModel;
 import com.softuni.cuisineonline.service.models.video.VideoUploadServiceModel;
+import com.softuni.cuisineonline.service.services.domain.AuthenticatedUserFacade;
 import com.softuni.cuisineonline.service.services.domain.UserService;
 import com.softuni.cuisineonline.service.services.domain.VideoService;
 import com.softuni.cuisineonline.service.services.util.MappingService;
@@ -27,7 +28,7 @@ public class VideoServiceImpl implements VideoService {
     private final UserRepository userRepository;
     private final MappingService mappingService;
     private final VideoValidationService validationService;
-    private final AuthenticatedUserFacadeImpl authenticationFacade;
+    private final AuthenticatedUserFacade authenticationFacade;
     private final UserService userService;
 
     public VideoServiceImpl(
@@ -35,7 +36,8 @@ public class VideoServiceImpl implements VideoService {
             UserRepository userRepository,
             MappingService mappingService,
             VideoValidationService validationService,
-            AuthenticatedUserFacadeImpl authenticationFacade, UserService userService) {
+            AuthenticatedUserFacade authenticationFacade,
+            UserService userService) {
         this.videoRepository = videoRepository;
         this.userRepository = userRepository;
         this.mappingService = mappingService;

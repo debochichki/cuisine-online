@@ -1,7 +1,6 @@
 package com.softuni.cuisineonline.service.services.domain;
 
 import com.softuni.cuisineonline.data.models.Rank;
-import com.softuni.cuisineonline.data.models.Role;
 import com.softuni.cuisineonline.data.models.User;
 import com.softuni.cuisineonline.data.repositories.UserRepository;
 import com.softuni.cuisineonline.errors.ValidationException;
@@ -15,9 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.core.GrantedAuthority;
 
-import java.util.Map;
 import java.util.stream.Collectors;
 
+import static com.softuni.cuisineonline.util.TestUtils.ALL_ROLES_MAP;
 import static org.mockito.Mockito.verify;
 
 class AuthServiceIT extends TestServiceBase {
@@ -25,11 +24,6 @@ class AuthServiceIT extends TestServiceBase {
     private static final String VALID_USERNAME = "Koleto";
     private static final String VALID_PASSWORD = "koleto123";
     private static final String VALID_EMAIL_ADDRESS = "koleto@abv.bg";
-
-    private static final Map<String, Role> ALL_ROLES_MAP =
-            Map.of("ROOT", new Role("ROOT"),
-                    "ADMIN", new Role("ADMIN"),
-                    "USER", new Role("USER"));
 
     private UserRegisterServiceModel registerModel;
 
@@ -50,7 +44,7 @@ class AuthServiceIT extends TestServiceBase {
     }
 
     @Test
-    public void authService_WhenValidRegisterModelAndFirstRegisteredUser_ShouldSetAllAuthorities() {
+    public void register_WhenValidRegisterModelAndFirstRegisteredUser_ShouldSetAllAuthorities() {
         Mockito.when(userRepository.count()).thenReturn(0L);
 
         service.register(registerModel);
@@ -67,7 +61,7 @@ class AuthServiceIT extends TestServiceBase {
     }
 
     @Test
-    public void authService_WhenValidRegisterModelAndSecondRegisteredUser_ShouldSetOnlyUserAuthority() {
+    public void register_WhenValidRegisterModelAndSecondRegisteredUser_ShouldSetOnlyUserAuthority() {
         Mockito.when(userRepository.count()).thenReturn(1L);
 
         service.register(registerModel);
@@ -82,7 +76,7 @@ class AuthServiceIT extends TestServiceBase {
     }
 
     @Test
-    public void authService_WhenValidRegisterModel_ShouldEncodePassword() {
+    public void register_WhenValidRegisterModel_ShouldEncodePassword() {
         Mockito.when(userRepository.count()).thenReturn(1L);
 
         service.register(registerModel);
@@ -95,7 +89,7 @@ class AuthServiceIT extends TestServiceBase {
     }
 
     @Test
-    public void authService_WhenValidRegisterModel_ShouldSetProfileWithCorrectRank() {
+    public void register_WhenValidRegisterModel_ShouldSetProfileWithCorrectRank() {
         Mockito.when(userRepository.count()).thenReturn(1L);
 
         service.register(registerModel);
@@ -109,13 +103,13 @@ class AuthServiceIT extends TestServiceBase {
     }
 
     @Test
-    public void authService_WhenRegisterModelWithNullObligatoryField_ShouldThrow() {
+    public void register_WhenRegisterModelWithNullObligatoryField_ShouldThrow() {
         registerModel.setUsername(null);
         Assert.assertThrows(ValidationException.class, () -> service.register(registerModel));
     }
 
     @Test
-    public void authService_WhenRegisterModelWithUsernameInvalidLength_ShouldThrow() {
+    public void register_WhenRegisterModelWithUsernameInvalidLength_ShouldThrow() {
         final String shortUsername = "Hi";
         final String longUsername = "TooLongUsernameToRegister";
 
@@ -127,14 +121,14 @@ class AuthServiceIT extends TestServiceBase {
     }
 
     @Test
-    public void authService_WhenRegisterModelPasswordsNotMatching_ShouldThrow() {
+    public void register_WhenRegisterModelPasswordsNotMatching_ShouldThrow() {
         registerModel.setConfirmPassword(VALID_PASSWORD + "invalid");
 
         Assert.assertThrows(ValidationException.class, () -> service.register(registerModel));
     }
 
     @Test
-    public void authService_WhenRegisterModelWithInvalidEmail_ShouldThrow() {
+    public void register_WhenRegisterModelWithInvalidEmail_ShouldThrow() {
         final String invalidEmail = VALID_PASSWORD.replace("@", "");
         registerModel.setEmail(invalidEmail);
 
@@ -142,14 +136,14 @@ class AuthServiceIT extends TestServiceBase {
     }
 
     @Test
-    public void authService_WhenRegisterModelUsernameIsTaken_ShouldThrow() {
+    public void register_WhenRegisterModelUsernameIsTaken_ShouldThrow() {
         Mockito.when(userRepository.existsByUsername(VALID_USERNAME)).thenReturn(true);
 
         Assert.assertThrows(ValidationException.class, () -> service.register(registerModel));
     }
 
     @Test
-    public void authService_WhenRegisterModelEmailAddressIsTaken_ShouldThrow() {
+    public void register_WhenRegisterModelEmailAddressIsTaken_ShouldThrow() {
         Mockito.when(userRepository.existsByEmail(VALID_EMAIL_ADDRESS)).thenReturn(true);
 
         Assert.assertThrows(ValidationException.class, () -> service.register(registerModel));

@@ -9,6 +9,7 @@ import com.softuni.cuisineonline.service.base.TestServiceBase;
 import com.softuni.cuisineonline.service.models.appliance.ApplianceCreateServiceModel;
 import com.softuni.cuisineonline.service.models.appliance.ApplianceServiceModel;
 import com.softuni.cuisineonline.service.services.util.MappingService;
+import com.softuni.cuisineonline.util.TestUtils;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -22,13 +23,15 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import static com.softuni.cuisineonline.service.services.util.Constants.TITLE_LENGTH_UPPER_BOUND;
 import static org.mockito.Mockito.verify;
 
 class ApplianceServiceIT extends TestServiceBase {
 
     private static final String APPLIANCE_NAME = "Mixer";
     private static final String INVALID_SHORT_APPLIANCE_NAME = "M";
-    private static final String INVALID_LONG_APPLIANCE_NAME = "MixerMixerMixerMixerMixerMixer";
+    private static final String INVALID_LONG_APPLIANCE_NAME =
+            TestUtils.getRandomString(TITLE_LENGTH_UPPER_BOUND + 1);
     private static final String IMAGE_ID = "imageId";
 
     @Autowired

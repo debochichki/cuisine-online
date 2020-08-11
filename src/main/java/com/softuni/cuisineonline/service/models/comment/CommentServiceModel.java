@@ -1,14 +1,14 @@
 package com.softuni.cuisineonline.service.models.comment;
 
 import com.softuni.cuisineonline.service.models.base.BaseServiceModel;
-import lombok.Getter;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.time.Instant;
 
-@Getter
-@Setter
+@EqualsAndHashCode(callSuper = true)
+@Data
 @NoArgsConstructor
 public class CommentServiceModel extends BaseServiceModel {
 

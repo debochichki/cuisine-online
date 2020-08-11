@@ -65,7 +65,7 @@ public class UserServiceImpl implements UserService {
         List<UserServiceModel> serviceModels = userRepository.findAll().stream()
                 .map(u -> {
                     UserServiceModel serviceModel = mappingService.map(u, UserServiceModel.class);
-                    List<String> authorities = getUserAuthoritiesAsStringValues(u);
+                    List<String> authorities = extractAuthorities(u);
                     serviceModel.setRoleStanding(RoleStanding.resolve(authorities));
                     return serviceModel;
                 }).sorted(
@@ -76,21 +76,13 @@ public class UserServiceImpl implements UserService {
         return serviceModels;
     }
 
-    @Override
-    public List<String> getUserAuthorities(String username) {
-        User user = getUserByUsername(username);
-        return user.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)
-                .collect(toList());
-    }
-
     /**
      * Deletes all users that have not logged in for the declared period of time in months
      */
     @Override
     public void deleteInactiveUsers(final int periodInMonths) {
         final Predicate<User> isInactiveForDeletion = (user) ->
-                !getUserAuthoritiesAsStringValues(user).contains("ROOT") &&
+                !extractAuthorities(user).contains("ROOT") &&
                         Period.between(user.getLastLogin(), LocalDate.now()).toTotalMonths() - periodInMonths > 0;
 
         List<User> usersForDeletion =
@@ -140,6 +132,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean canModify(String principalName, String uploaderUsername) {
+        if (principalName == null || uploaderUsername == null) {
+            throw new IllegalArgumentException("Arguments cannot be null.");
+        }
+
         return isOwner(principalName, uploaderUsername) ||
                 hasAuthorityToModify(principalName, uploaderUsername);
     }
@@ -166,10 +162,15 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new MissingEntityException("No user with username: " + username));
     }
 
-    private List<String> getUserAuthoritiesAsStringValues(User user) {
+    private List<String> extractAuthorities(User user) {
         return user.getAuthorities()
                 .stream().map(GrantedAuthority::getAuthority)
                 .collect(toList());
+    }
+
+    private List<String> getUserAuthorities(String username) {
+        User user = getUserByUsername(username);
+        return extractAuthorities(user);
     }
 
     private GrantedAuthority getAuthority(String authorityStr) {

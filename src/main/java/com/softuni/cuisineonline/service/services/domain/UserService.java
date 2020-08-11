@@ -17,8 +17,6 @@ public interface UserService extends UserDetailsService {
 
     List<UserServiceModel> getAllUsers();
 
-    List<String> getUserAuthorities(String username);
-
     void deleteInactiveUsers(int periodInMonths);
 
     void updateUserLoginDate(String username);
