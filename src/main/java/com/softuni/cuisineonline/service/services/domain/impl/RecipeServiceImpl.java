@@ -173,26 +173,25 @@ public class RecipeServiceImpl implements RecipeService {
 
     @Override
     public List<RecipeServiceModel> getRandomRecipes(int numberOfRecipes) {
-        // ToDo: Fix - it returns duplicates
         List<Recipe> all = recipeRepository.findAll();
-        if (all.size() < numberOfRecipes) {
-            numberOfRecipes = all.size();
+        if (all.size() <= numberOfRecipes) {
+            return mappingService.mapAll(all, RecipeServiceModel.class);
         }
 
-        List<RecipeServiceModel> serviceModels = new ArrayList<>();
+        List<Recipe> rndRecipes = getListOfRandomDistinctRecipes(all, numberOfRecipes);
+        return mappingService.mapAll(rndRecipes, RecipeServiceModel.class);
+    }
+
+    private List<Recipe> getListOfRandomDistinctRecipes(List<Recipe> recipes, int count) {
+        List<Recipe> all = new ArrayList<>(recipes);
+        List<Recipe> randomRecipes = new ArrayList<>();
         Random random = new Random();
-        int counter = 0;
-        while (counter < numberOfRecipes) {
+        for (int i = 0; i < count; i++) {
             int rndIndex = random.nextInt(all.size());
-            RecipeServiceModel serviceModel =
-                    mappingService.map(all.get(rndIndex), RecipeServiceModel.class);
-            if (!serviceModels.contains(serviceModel)) {
-                serviceModels.add(serviceModel);
-                counter++;
-            }
+            randomRecipes.add(all.remove(rndIndex));
         }
 
-        return serviceModels;
+        return randomRecipes;
     }
 
     private void handleImageRollback(Image image) {

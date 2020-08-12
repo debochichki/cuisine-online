@@ -6,6 +6,7 @@ import com.softuni.cuisineonline.data.models.User;
 import com.softuni.cuisineonline.data.repositories.RoleRepository;
 import com.softuni.cuisineonline.data.repositories.UserRepository;
 import com.softuni.cuisineonline.errors.MissingEntityException;
+import com.softuni.cuisineonline.errors.ValidationException;
 import com.softuni.cuisineonline.service.models.user.RoleStanding;
 import com.softuni.cuisineonline.service.models.user.UserProfileServiceModel;
 import com.softuni.cuisineonline.service.models.user.UserServiceModel;
@@ -114,6 +115,11 @@ public class UserServiceImpl implements UserService {
     @SuppressWarnings("unchecked")
     public void promoteToAdmin(String id) {
         User user = getUserById(id);
+        List<String> authorities = extractAuthorities(user);
+        if (authorities.contains("ADMIN")) {
+            throw new ValidationException("User already has authority: ADMIN");
+        }
+
         Collection<GrantedAuthority> userAuthorities
                 = (Collection<GrantedAuthority>) user.getAuthorities();
         userAuthorities.add(getAuthority("ADMIN"));
@@ -124,6 +130,11 @@ public class UserServiceImpl implements UserService {
     @SuppressWarnings("unchecked")
     public void demoteToUser(String id) {
         User user = getUserById(id);
+        List<String> authorities = extractAuthorities(user);
+        if (authorities.contains("ROOT")) {
+            throw new ValidationException("Cannot demote ROOT user.");
+        }
+
         Collection<GrantedAuthority> userAuthorities
                 = (Collection<GrantedAuthority>) user.getAuthorities();
         userAuthorities.remove(getAuthority("ADMIN"));
@@ -173,7 +184,7 @@ public class UserServiceImpl implements UserService {
         return extractAuthorities(user);
     }
 
-    private GrantedAuthority getAuthority(String authorityStr) {
+    private GrantedAuthority getAuthority(final String authorityStr) {
         return roleRepository.findByAuthority(authorityStr)
                 .orElseThrow(() ->
                         new EntityNotFoundException("No role with authority: " + authorityStr));

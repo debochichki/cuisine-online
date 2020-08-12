@@ -1,10 +1,7 @@
 package com.softuni.cuisineonline.util;
 
 
-import com.softuni.cuisineonline.data.models.Profile;
-import com.softuni.cuisineonline.data.models.Rank;
-import com.softuni.cuisineonline.data.models.Role;
-import com.softuni.cuisineonline.data.models.User;
+import com.softuni.cuisineonline.data.models.*;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -14,6 +11,7 @@ public class TestUtils {
 
     private static final Random RANDOM = new Random();
     private static final String[] USERNAMES = {"Pesho", "Gosho", "Koleto"};
+    private static final String[] RECIPE_TITLES = {"Pizza", "Shopska salad", "Cheese Cake"};
     private static final int RANDOM_STRING_LENGTH = 8;
 
     public static final Map<String, Role> ALL_ROLES_MAP = new LinkedHashMap<>();
@@ -33,6 +31,7 @@ public class TestUtils {
 
         for (int i = 0; i < USERNAMES.length; i++) {
             User user = new User();
+            user.setId(getRandomString(RANDOM_STRING_LENGTH));
             user.setUsername(USERNAMES[i]);
             user.setPassword(getRandomString(RANDOM_STRING_LENGTH));
             user.setLastLogin(LocalDate.now().plus(i, ChronoUnit.DAYS));
@@ -47,6 +46,11 @@ public class TestUtils {
             profile.setRank(Rank.NOVICE);
             user.setProfile(profile);
             profile.setUser(user);
+
+            Recipe recipe = new Recipe();
+            recipe.setTitle(RECIPE_TITLES[i]);
+            recipe.setUploader(profile);
+            profile.setRecipes(List.of(recipe));
 
             result.add(user);
         }
