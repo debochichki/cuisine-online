@@ -13,6 +13,8 @@ public class TestUtils {
     private static final String[] USERNAMES = {"Pesho", "Gosho", "Koleto"};
     private static final String[] RECIPE_TITLES = {"Pizza", "Shopska salad", "Cheese Cake"};
     private static final int RANDOM_STRING_LENGTH = 8;
+    public static final String[][] VALID_INGREDIENTS_DATA =
+            {{"olives", "100", "gr"}, {"tomatoes", "2", "pcs"}, {"ham", "200", "gr"}};
 
     public static final Map<String, Role> ALL_ROLES_MAP = new LinkedHashMap<>();
 
@@ -48,8 +50,11 @@ public class TestUtils {
             profile.setUser(user);
 
             Recipe recipe = new Recipe();
+            recipe.setId("Recipe" + getRandomString(4));
             recipe.setTitle(RECIPE_TITLES[i]);
             recipe.setUploader(profile);
+            recipe.setDescription(getRandomString(50));
+            recipe.setType(getRandomListValue(Arrays.asList(Recipe.Type.values())));
             profile.setRecipes(List.of(recipe));
 
             result.add(user);

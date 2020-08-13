@@ -34,6 +34,7 @@ public class RecipeServiceImpl implements RecipeService {
 
     private static final String RECIPE_TYPE_ICON_URL_TEMPLATE = "/icon/%s_icon.png";
     private static final String INGREDIENT_TEXT_AREA_VALUE_SEPARATOR = ",";
+    public static final String ALL = "ALL";
     private static final String ALL_RECIPES_FILTER_OPTION = "ALL";
     private final RecipeRepository recipeRepository;
     private final ApplianceRepository applianceRepository;
@@ -76,7 +77,7 @@ public class RecipeServiceImpl implements RecipeService {
     @Override
     public List<String> getRecipeFilterOptions() {
         List<String> filterOptions = new ArrayList<>();
-        filterOptions.add("ALL");
+        filterOptions.add(ALL_RECIPES_FILTER_OPTION);
         filterOptions.addAll(getRecipeTypesAsStringValues());
         return filterOptions;
     }
@@ -135,7 +136,7 @@ public class RecipeServiceImpl implements RecipeService {
         Image oldImage = null;
 
         try {
-            if (!multipartFile.isEmpty()) {
+            if (multipartFile != null && !multipartFile.isEmpty()) {
                 newImage = cloudinaryService.uploadImage(multipartFile);
                 oldImage = recipe.getImage();
                 recipe.setImage(newImage);

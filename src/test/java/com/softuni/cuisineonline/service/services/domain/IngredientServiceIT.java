@@ -9,10 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.InputMismatchException;
 import java.util.List;
 
-class IngredientServiceIT extends TestServiceBase {
+import static com.softuni.cuisineonline.util.TestUtils.VALID_INGREDIENTS_DATA;
 
-    public static final String[][] VALID_INGREDIENTS_DATA =
-            {{"olives", "100", "gr"}, {"tomatoes", "2", "pcs"}, {"ham", "200", "gr"}};
+class IngredientServiceIT extends TestServiceBase {
 
     @Autowired
     IngredientService service;
